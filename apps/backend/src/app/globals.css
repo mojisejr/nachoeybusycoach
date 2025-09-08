@@ -1,26 +1,97 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Base styles */
+@layer base {
+  html {
+    font-family: 'Inter', 'Sarabun', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-base-100 text-base-content;
+  }
+  
+  /* Thai text styling */
+  .thai-text {
+    font-family: 'Sarabun', system-ui, sans-serif;
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-base-200;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-base-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Component styles */
+@layer components {
+  /* Admin panel specific styles */
+  .admin-card {
+    @apply card bg-base-100 shadow-xl;
+  }
+  
+  .admin-table {
+    @apply table table-zebra w-full;
+  }
+  
+  .admin-btn {
+    @apply btn btn-primary;
+  }
+  
+  .admin-input {
+    @apply input input-bordered w-full;
+  }
+  
+  /* Dashboard styles */
+  .dashboard-stat {
+    @apply stat bg-base-200 rounded-lg;
+  }
+  
+  .dashboard-chart {
+    @apply bg-base-100 p-4 rounded-lg shadow;
+  }
+}
+
+/* Utility styles */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

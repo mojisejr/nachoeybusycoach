@@ -1,13 +1,22 @@
 {
-  "name": "ui",
+  "name": "@nachoeybusycoach/ui",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
+  "description": "Shared UI components for NachoeyBusyCoach",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "react": "workspace:*",
+    "react-dom": "workspace:*",
+    "@nachoeybusycoach/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "workspace:*",
+    "@types/react": "workspace:*",
+    "@types/react-dom": "workspace:*"
+  },
   "packageManager": "pnpm@10.15.0"
 }

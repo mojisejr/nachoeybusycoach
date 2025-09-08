@@ -1,13 +1,18 @@
 {
-  "name": "utils",
+  "name": "@nachoeybusycoach/utils",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
+  "description": "Shared utility functions for NachoeyBusyCoach",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "@nachoeybusycoach/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "workspace:*"
+  },
   "packageManager": "pnpm@10.15.0"
 }
