@@ -24,10 +24,10 @@ importers:
         specifier: 15.5.2
         version: 15.5.2(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-auth:
-        specifier: ^4.24.5
+        specifier: ^4.24.11
         version: 4.24.11(next@15.5.2(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-auth-sanity:
-        specifier: ^1.0.10
+        specifier: ^1.5.3
         version: 1.5.3(@sanity/client@7.11.0)(next-auth@4.24.11(next@15.5.2(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       next-sanity:
         specifier: ^9.12.3

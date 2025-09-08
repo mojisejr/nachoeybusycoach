@@ -1,44 +1,29 @@
 # Current Focus
 
-**Updated**: 2025-09-08 20:35:55
+**Updated:** 2025-09-08 22:00:48
 
 ## Context
 
-From `/Users/non/dev/vibes/nachoeybusycoach/resources/BACKEND_IMPLEMENTATION_PLAN.md` file implement Sub-phase 1.1: Project Setup & Sanity Configuration
+From `/Users/non/dev/vibes/nachoeybusycoach/resources/BACKEND_IMPLEMENTATION_PLAN.md` implement sub-phase 2.1 focus testing on google first and leave facebook their because I haven't set up the .env for facebook yet
 
 ## Implementation Focus
 
-**Sub-Phase 1.1: Project Setup & Sanity Configuration (เช้า)**
+- **Phase:** Sub-Phase 2.1 - NextAuth.js Setup (เช้า)
+- **Goal:** ตั้งค่าระบบ Authentication
+- **Priority:** Google OAuth implementation and testing
+- **Status:** Facebook OAuth setup deferred (missing .env configuration)
 
-**เป้าหมาย**: ตั้งค่าโปรเจกต์และ Sanity CMS
+## Key Tasks
 
-**สถานะปัจจุบัน**: 
-- ✅ Next.js 15.5.2 project ใน `/apps/backend` (ตั้งค่าแล้ว)
-- ✅ TypeScript, Tailwind CSS (ติดตั้งแล้ว)
-- ❌ Sanity dependencies (ยังไม่ได้ติดตั้ง)
+1. Install and configure NextAuth.js dependencies
+2. Create NextAuth configuration with Google Provider (priority)
+3. Set up authentication middleware
+4. Manual testing with Google OAuth
+5. Skip Facebook testing until .env is properly configured
 
-**งานที่ต้องทำ**:
-1. ติดตั้ง dependencies ใน `/apps/backend`:
-   - @sanity/client @sanity/image-url
-   - next-auth @auth/sanity-adapter
-   - zod
-   - @sanity/cli (dev dependency)
+## Notes
 
-2. สร้าง Sanity project (แยกจาก Next.js backend):
-   - ใช้ existing project ID: u0rtdnil
-
-3. ตั้งค่า environment variables:
-   - Copy .env.example to .env.local
-   - ตั้งค่า SANITY_PROJECT_ID=u0rtdnil
-   - ตั้งค่า NEXTAUTH_URL=http://localhost:3001
-   - ตั้งค่า FRONTEND_URL=http://localhost:3000
-
-4. สร้าง Sanity client configuration:
-   - สร้างไฟล์ `/apps/backend/src/lib/sanity.ts`
-   - ตั้งค่า createClient และ type definitions
-
-**Manual Testing**:
-- รัน backend server ที่ port 3001
-- รัน Sanity Studio ที่ port 3333
-- ทดสอบการเชื่อมต่อกับ Sanity API
-- ทดสอบ environment variables
+- Focus on Google authentication first for immediate testing
+- Facebook provider code can be included but testing deferred
+- Ensure proper session handling and user role management
+- Test authentication flow thoroughly before proceeding

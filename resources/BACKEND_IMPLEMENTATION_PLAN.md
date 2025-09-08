@@ -30,15 +30,18 @@
 
 ## Phase 1: Foundation & Sanity Setup (วันที่ 1)
 
-### Sub-Phase 1.1: Project Setup & Sanity Configuration (เช้า)
+### Sub-Phase 1.1: Project Setup & Sanity Configuration (เช้า) DONE
+
 **เป้าหมาย**: ตั้งค่าโปรเจกต์และ Sanity CMS
 
-**สถานะปัจจุบัน**: 
+**สถานะปัจจุบัน**:
+
 - ✅ Next.js 15.5.2 project ใน `/apps/backend` (ตั้งค่าแล้ว)
 - ✅ TypeScript, Tailwind CSS (ติดตั้งแล้ว)
 - ❌ Sanity dependencies (ยังไม่ได้ติดตั้ง)
 
 **งานที่ต้องทำ**:
+
 - ติดตั้ง dependencies ใน `/apps/backend`:
   ```bash
   cd apps/backend
@@ -54,38 +57,43 @@
   # หรือใช้ existing project ID จาก sanity-prompt.md: u0rtdnil
   ```
 - ตั้งค่า environment variables (ใช้ไฟล์ .env.example ที่สร้างไว้แล้ว):
+
   ```bash
   # ใน /apps/backend/
   cp .env.example .env.local
   # แก้ไขค่าต่างๆ ตามความเหมาะสม
   ```
-  
+
   **ค่าสำคัญที่ต้องตั้ง**:
+
   - `SANITY_PROJECT_ID=u0rtdnil` (จาก sanity-prompt.md)
   - `NEXTAUTH_URL=http://localhost:3001` (backend port)
   - `FRONTEND_URL=http://localhost:3000` (frontend port)
+
 - สร้าง Sanity client configuration:
+
   ```typescript
   // /apps/backend/src/lib/sanity.ts
-  import { createClient } from '@sanity/client'
-  
+  import { createClient } from "@sanity/client";
+
   export const client = createClient({
     projectId: process.env.SANITY_PROJECT_ID!,
     dataset: process.env.SANITY_DATASET!,
     token: process.env.SANITY_API_TOKEN,
     useCdn: false,
-    apiVersion: '2024-01-01'
-  })
-  
+    apiVersion: "2024-01-01",
+  });
+
   // Type definitions
   export interface SanityConfig {
-    projectId: string
-    dataset: string
-    apiVersion: string
+    projectId: string;
+    dataset: string;
+    apiVersion: string;
   }
   ```
 
 **Manual Testing**:
+
 - รัน `cd apps/backend && pnpm install` เพื่อติดตั้ง dependencies
 - รัน `cd apps/backend && pnpm dev` เช็คว่า backend server รันที่ port 3001
 - รัน `cd studio-nachoeymaiwang && pnpm sanity dev` เช็คว่า Sanity Studio เข้าถึงได้ที่ port 3333
@@ -93,366 +101,380 @@
 - ทดสอบ environment variables
 
 ### Sub-Phase 1.2: Schema Definition (บ่าย)
+
 **เป้าหมาย**: สร้าง Sanity schemas ตาม PRD
 
 **งานที่ต้องทำ**:
+
 - สร้าง schema files ใน `/sanity/schemas/`:
 
 **User Schema** (`/sanity/schemas/user.ts`):
+
 ```typescript
 export default {
-  name: 'user',
-  title: 'User',
-  type: 'document',
+  name: "user",
+  title: "User",
+  type: "document",
   fields: [
     {
-      name: 'name',
-      title: 'Name',
-      type: 'string',
-      validation: Rule => Rule.required()
+      name: "name",
+      title: "Name",
+      type: "string",
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'email',
-      title: 'Email',
-      type: 'string',
-      validation: Rule => Rule.required().email()
+      name: "email",
+      title: "Email",
+      type: "string",
+      validation: (Rule) => Rule.required().email(),
     },
     {
-      name: 'role',
-      title: 'Role',
-      type: 'string',
+      name: "role",
+      title: "Role",
+      type: "string",
       options: {
         list: [
-          { title: 'Runner', value: 'runner' },
-          { title: 'Coach', value: 'coach' }
-        ]
+          { title: "Runner", value: "runner" },
+          { title: "Coach", value: "coach" },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'avatar',
-      title: 'Avatar',
-      type: 'image'
+      name: "avatar",
+      title: "Avatar",
+      type: "image",
     },
     {
-      name: 'profile',
-      title: 'Profile',
-      type: 'object',
+      name: "profile",
+      title: "Profile",
+      type: "object",
       fields: [
-        { name: 'age', title: 'Age', type: 'number' },
-        { name: 'weight', title: 'Weight (kg)', type: 'number' },
-        { name: 'height', title: 'Height (cm)', type: 'number' },
-        { name: 'experience', title: 'Running Experience', type: 'string' },
-        { name: 'goals', title: 'Goals', type: 'text' }
-      ]
+        { name: "age", title: "Age", type: "number" },
+        { name: "weight", title: "Weight (kg)", type: "number" },
+        { name: "height", title: "Height (cm)", type: "number" },
+        { name: "experience", title: "Running Experience", type: "string" },
+        { name: "goals", title: "Goals", type: "text" },
+      ],
     },
     {
-      name: 'coachId',
-      title: 'Coach',
-      type: 'reference',
-      to: [{ type: 'user' }],
-      validation: Rule => Rule.custom((coachId, context) => {
-        if (context.document?.role === 'runner' && !coachId) {
-          return 'Runner must have a coach'
-        }
-        return true
-      })
-    }
-  ]
-}
+      name: "coachId",
+      title: "Coach",
+      type: "reference",
+      to: [{ type: "user" }],
+      validation: (Rule) =>
+        Rule.custom((coachId, context) => {
+          if (context.document?.role === "runner" && !coachId) {
+            return "Runner must have a coach";
+          }
+          return true;
+        }),
+    },
+  ],
+};
 ```
 
 **TrainingPlan Schema** (`/sanity/schemas/trainingPlan.ts`):
+
 ```typescript
 export default {
-  name: 'trainingPlan',
-  title: 'Training Plan',
-  type: 'document',
+  name: "trainingPlan",
+  title: "Training Plan",
+  type: "document",
   fields: [
     {
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: Rule => Rule.required()
+      name: "title",
+      title: "Title",
+      type: "string",
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'description',
-      title: 'Description',
-      type: 'text'
+      name: "description",
+      title: "Description",
+      type: "text",
     },
     {
-      name: 'runnerId',
-      title: 'Runner',
-      type: 'reference',
-      to: [{ type: 'user' }],
-      validation: Rule => Rule.required()
+      name: "runnerId",
+      title: "Runner",
+      type: "reference",
+      to: [{ type: "user" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'coachId',
-      title: 'Coach',
-      type: 'reference',
-      to: [{ type: 'user' }],
-      validation: Rule => Rule.required()
+      name: "coachId",
+      title: "Coach",
+      type: "reference",
+      to: [{ type: "user" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'weekStart',
-      title: 'Week Start Date',
-      type: 'date',
-      validation: Rule => Rule.required()
+      name: "weekStart",
+      title: "Week Start Date",
+      type: "date",
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'weekEnd',
-      title: 'Week End Date',
-      type: 'date',
-      validation: Rule => Rule.required()
+      name: "weekEnd",
+      title: "Week End Date",
+      type: "date",
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'status',
-      title: 'Status',
-      type: 'string',
+      name: "status",
+      title: "Status",
+      type: "string",
       options: {
         list: [
-          { title: 'Draft', value: 'draft' },
-          { title: 'Active', value: 'active' },
-          { title: 'Completed', value: 'completed' },
-          { title: 'Cancelled', value: 'cancelled' }
-        ]
+          { title: "Draft", value: "draft" },
+          { title: "Active", value: "active" },
+          { title: "Completed", value: "completed" },
+          { title: "Cancelled", value: "cancelled" },
+        ],
       },
-      initialValue: 'draft'
-    }
-  ]
-}
+      initialValue: "draft",
+    },
+  ],
+};
 ```
 
 **TrainingSession Schema** (`/sanity/schemas/trainingSession.ts`):
+
 ```typescript
 export default {
-  name: 'trainingSession',
-  title: 'Training Session',
-  type: 'document',
+  name: "trainingSession",
+  title: "Training Session",
+  type: "document",
   fields: [
     {
-      name: 'planId',
-      title: 'Training Plan',
-      type: 'reference',
-      to: [{ type: 'trainingPlan' }],
-      validation: Rule => Rule.required()
+      name: "planId",
+      title: "Training Plan",
+      type: "reference",
+      to: [{ type: "trainingPlan" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'day',
-      title: 'Day of Week',
-      type: 'string',
+      name: "day",
+      title: "Day of Week",
+      type: "string",
       options: {
         list: [
-          'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-          'Friday', 'Saturday', 'Sunday'
-        ]
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'date',
-      title: 'Date',
-      type: 'date',
-      validation: Rule => Rule.required()
+      name: "date",
+      title: "Date",
+      type: "date",
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'type',
-      title: 'Session Type',
-      type: 'string',
+      name: "type",
+      title: "Session Type",
+      type: "string",
       options: {
         list: [
-          { title: 'Easy Run', value: 'easy' },
-          { title: 'Interval Training', value: 'interval' },
-          { title: 'Tempo Run', value: 'tempo' },
-          { title: 'Long Run', value: 'long' },
-          { title: 'Recovery Run', value: 'recovery' },
-          { title: 'Rest Day', value: 'rest' }
-        ]
+          { title: "Easy Run", value: "easy" },
+          { title: "Interval Training", value: "interval" },
+          { title: "Tempo Run", value: "tempo" },
+          { title: "Long Run", value: "long" },
+          { title: "Recovery Run", value: "recovery" },
+          { title: "Rest Day", value: "rest" },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'distance',
-      title: 'Distance',
-      type: 'string'
+      name: "distance",
+      title: "Distance",
+      type: "string",
     },
     {
-      name: 'duration',
-      title: 'Duration',
-      type: 'string'
+      name: "duration",
+      title: "Duration",
+      type: "string",
     },
     {
-      name: 'pace',
-      title: 'Target Pace',
-      type: 'string'
+      name: "pace",
+      title: "Target Pace",
+      type: "string",
     },
     {
-      name: 'notes',
-      title: 'Notes',
-      type: 'text'
+      name: "notes",
+      title: "Notes",
+      type: "text",
     },
     {
-      name: 'order',
-      title: 'Order',
-      type: 'number',
-      validation: Rule => Rule.required().min(0)
-    }
-  ]
-}
+      name: "order",
+      title: "Order",
+      type: "number",
+      validation: (Rule) => Rule.required().min(0),
+    },
+  ],
+};
 ```
 
 **WorkoutLog Schema** (`/sanity/schemas/workoutLog.ts`):
+
 ```typescript
 export default {
-  name: 'workoutLog',
-  title: 'Workout Log',
-  type: 'document',
+  name: "workoutLog",
+  title: "Workout Log",
+  type: "document",
   fields: [
     {
-      name: 'sessionId',
-      title: 'Training Session',
-      type: 'reference',
-      to: [{ type: 'trainingSession' }],
-      validation: Rule => Rule.required()
+      name: "sessionId",
+      title: "Training Session",
+      type: "reference",
+      to: [{ type: "trainingSession" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'runnerId',
-      title: 'Runner',
-      type: 'reference',
-      to: [{ type: 'user' }],
-      validation: Rule => Rule.required()
+      name: "runnerId",
+      title: "Runner",
+      type: "reference",
+      to: [{ type: "user" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'status',
-      title: 'Status',
-      type: 'string',
+      name: "status",
+      title: "Status",
+      type: "string",
       options: {
         list: [
-          { title: 'Completed', value: 'completed' },
-          { title: 'Did Not Finish (DNF)', value: 'dnf' },
-          { title: 'Undone', value: 'undone' }
-        ]
+          { title: "Completed", value: "completed" },
+          { title: "Did Not Finish (DNF)", value: "dnf" },
+          { title: "Undone", value: "undone" },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'externalLink',
-      title: 'External Link (Garmin/Strava)',
-      type: 'url'
+      name: "externalLink",
+      title: "External Link (Garmin/Strava)",
+      type: "url",
     },
     {
-      name: 'actualDistance',
-      title: 'Actual Distance (km)',
-      type: 'number'
+      name: "actualDistance",
+      title: "Actual Distance (km)",
+      type: "number",
     },
     {
-      name: 'actualDuration',
-      title: 'Actual Duration',
-      type: 'string'
+      name: "actualDuration",
+      title: "Actual Duration",
+      type: "string",
     },
     {
-      name: 'actualPace',
-      title: 'Actual Pace',
-      type: 'string'
+      name: "actualPace",
+      title: "Actual Pace",
+      type: "string",
     },
     {
-      name: 'notes',
-      title: 'Notes',
-      type: 'text'
+      name: "notes",
+      title: "Notes",
+      type: "text",
     },
     {
-      name: 'feeling',
-      title: 'Feeling',
-      type: 'string',
+      name: "feeling",
+      title: "Feeling",
+      type: "string",
       options: {
         list: [
-          { title: 'Excellent', value: 'excellent' },
-          { title: 'Good', value: 'good' },
-          { title: 'Okay', value: 'okay' },
-          { title: 'Tired', value: 'tired' },
-          { title: 'Exhausted', value: 'exhausted' }
-        ]
-      }
+          { title: "Excellent", value: "excellent" },
+          { title: "Good", value: "good" },
+          { title: "Okay", value: "okay" },
+          { title: "Tired", value: "tired" },
+          { title: "Exhausted", value: "exhausted" },
+        ],
+      },
     },
     {
-      name: 'injuries',
-      title: 'Injuries',
-      type: 'array',
-      of: [{ type: 'string' }]
+      name: "injuries",
+      title: "Injuries",
+      type: "array",
+      of: [{ type: "string" }],
     },
     {
-      name: 'weather',
-      title: 'Weather',
-      type: 'string'
+      name: "weather",
+      title: "Weather",
+      type: "string",
     },
     {
-      name: 'temperature',
-      title: 'Temperature (°C)',
-      type: 'number'
-    }
-  ]
-}
+      name: "temperature",
+      title: "Temperature (°C)",
+      type: "number",
+    },
+  ],
+};
 ```
 
 **Feedback Schema** (`/sanity/schemas/feedback.ts`):
+
 ```typescript
 export default {
-  name: 'feedback',
-  title: 'Feedback',
-  type: 'document',
+  name: "feedback",
+  title: "Feedback",
+  type: "document",
   fields: [
     {
-      name: 'workoutLogId',
-      title: 'Workout Log',
-      type: 'reference',
-      to: [{ type: 'workoutLog' }],
-      validation: Rule => Rule.required()
+      name: "workoutLogId",
+      title: "Workout Log",
+      type: "reference",
+      to: [{ type: "workoutLog" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'authorId',
-      title: 'Author',
-      type: 'reference',
-      to: [{ type: 'user' }],
-      validation: Rule => Rule.required()
+      name: "authorId",
+      title: "Author",
+      type: "reference",
+      to: [{ type: "user" }],
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'content',
-      title: 'Content',
-      type: 'text',
-      validation: Rule => Rule.required()
+      name: "content",
+      title: "Content",
+      type: "text",
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'type',
-      title: 'Type',
-      type: 'string',
+      name: "type",
+      title: "Type",
+      type: "string",
       options: {
         list: [
-          { title: 'Praise', value: 'praise' },
-          { title: 'Suggestion', value: 'suggestion' },
-          { title: 'Concern', value: 'concern' },
-          { title: 'Question', value: 'question' }
-        ]
+          { title: "Praise", value: "praise" },
+          { title: "Suggestion", value: "suggestion" },
+          { title: "Concern", value: "concern" },
+          { title: "Question", value: "question" },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'attachments',
-      title: 'Attachments',
-      type: 'array',
-      of: [{ type: 'image' }, { type: 'file' }]
+      name: "attachments",
+      title: "Attachments",
+      type: "array",
+      of: [{ type: "image" }, { type: "file" }],
     },
     {
-      name: 'parentId',
-      title: 'Parent Feedback (for replies)',
-      type: 'reference',
-      to: [{ type: 'feedback' }]
-    }
-  ]
-}
+      name: "parentId",
+      title: "Parent Feedback (for replies)",
+      type: "reference",
+      to: [{ type: "feedback" }],
+    },
+  ],
+};
 ```
 
 **Manual Testing**:
+
 - ทดสอบการสร้างข้อมูลใน Sanity Studio
 - ทดสอบ relationships ระหว่าง documents
 - ทดสอบ data validation
@@ -461,32 +483,35 @@ export default {
 ## Phase 2: Authentication & User Management (วันที่ 2)
 
 ### Sub-Phase 2.1: NextAuth.js Setup (เช้า)
+
 **เป้าหมาย**: ตั้งค่าระบบ Authentication
 
 **งานที่ต้องทำ**:
+
 - ติดตั้งและตั้งค่า NextAuth.js:
   ```bash
   pnpm add next-auth @auth/sanity-adapter
   ```
 - สร้าง NextAuth configuration (`/src/app/api/auth/[...nextauth]/route.ts`):
+
   ```typescript
-  import NextAuth from 'next-auth'
-  import GoogleProvider from 'next-auth/providers/google'
-  import FacebookProvider from 'next-auth/providers/facebook'
-  import { SanityAdapter } from '@auth/sanity-adapter'
-  import { client } from '@/lib/sanity'
-  
+  import NextAuth from "next-auth";
+  import GoogleProvider from "next-auth/providers/google";
+  import FacebookProvider from "next-auth/providers/facebook";
+  import { SanityAdapter } from "@auth/sanity-adapter";
+  import { client } from "@/lib/sanity";
+
   const handler = NextAuth({
     adapter: SanityAdapter(client),
     providers: [
       GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       }),
       FacebookProvider({
         clientId: process.env.FACEBOOK_CLIENT_ID!,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET!
-      })
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+      }),
     ],
     callbacks: {
       session: async ({ session, token }) => {
@@ -494,26 +519,27 @@ export default {
           const user = await client.fetch(
             `*[_type == "user" && email == $email][0]`,
             { email: session.user.email }
-          )
-          session.user.role = user?.role || 'runner'
-          session.user.id = user?._id
+          );
+          session.user.role = user?.role || "runner";
+          session.user.id = user?._id;
         }
-        return session
-      }
+        return session;
+      },
     },
     pages: {
-      signIn: '/login',
-      error: '/auth/error'
-    }
-  })
-  
-  export { handler as GET, handler as POST }
+      signIn: "/login",
+      error: "/auth/error",
+    },
+  });
+
+  export { handler as GET, handler as POST };
   ```
 
 - สร้าง middleware สำหรับ authentication (`/src/middleware.ts`):
+
   ```typescript
-  import { withAuth } from 'next-auth/middleware'
-  
+  import { withAuth } from "next-auth/middleware";
+
   export default withAuth(
     function middleware(req) {
       // Add custom logic here
@@ -522,64 +548,68 @@ export default {
       callbacks: {
         authorized: ({ token, req }) => {
           // Check if user is authenticated
-          return !!token
-        }
-      }
+          return !!token;
+        },
+      },
     }
-  )
-  
+  );
+
   export const config = {
-    matcher: ['/api/protected/:path*', '/dashboard/:path*']
-  }
+    matcher: ["/api/protected/:path*", "/dashboard/:path*"],
+  };
   ```
 
 **Manual Testing**:
+
 - ทดสอบการ login ด้วย OAuth providers (ใช้ test accounts)
 - ทดสอบการสร้าง user profile ใน Sanity
 - ทดสอบ session persistence
 - ทดสอบ middleware protection
 
 ### Sub-Phase 2.2: User API Endpoints (บ่าย)
+
 **เป้าหมาย**: สร้าง API endpoints สำหรับจัดการ users
 
 **งานที่ต้องทำ**:
+
 - สร้าง validation schemas (`/src/lib/validations/user.ts`):
+
   ```typescript
-  import { z } from 'zod'
-  
+  import { z } from "zod";
+
   export const userProfileSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    email: z.string().email('Invalid email'),
-    role: z.enum(['runner', 'coach']),
-    profile: z.object({
-      age: z.number().min(1).max(100).optional(),
-      weight: z.number().min(1).max(200).optional(),
-      height: z.number().min(1).max(250).optional(),
-      experience: z.string().optional(),
-      goals: z.string().optional()
-    }).optional()
-  })
-  
-  export type UserProfile = z.infer<typeof userProfileSchema>
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email"),
+    role: z.enum(["runner", "coach"]),
+    profile: z
+      .object({
+        age: z.number().min(1).max(100).optional(),
+        weight: z.number().min(1).max(200).optional(),
+        height: z.number().min(1).max(250).optional(),
+        experience: z.string().optional(),
+        goals: z.string().optional(),
+      })
+      .optional(),
+  });
+
+  export type UserProfile = z.infer<typeof userProfileSchema>;
   ```
 
 - สร้าง API endpoints:
 
 **Get User Profile** (`/src/app/api/users/profile/route.ts`):
+
 ```typescript
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { client } from '@/lib/sanity'
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { client } from "@/lib/sanity";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await client.fetch(
@@ -597,107 +627,98 @@ export async function GET(request: NextRequest) {
         }
       }`,
       { email: session.user.email }
-    )
+    );
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ user })
+    return NextResponse.json({ user });
   } catch (error) {
-    console.error('Error fetching user profile:', error)
+    console.error("Error fetching user profile:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Update User Profile** (`/src/app/api/users/profile/route.ts`):
+
 ```typescript
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const validatedData = userProfileSchema.parse(body)
+    const body = await request.json();
+    const validatedData = userProfileSchema.parse(body);
 
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0]`,
       { email: session.user.email }
-    )
+    );
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const updatedUser = await client
       .patch(user._id)
       .set(validatedData)
-      .commit()
+      .commit();
 
-    return NextResponse.json({ user: updatedUser })
+    return NextResponse.json({ user: updatedUser });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: "Validation error", details: error.errors },
         { status: 400 }
-      )
+      );
     }
 
-    console.error('Error updating user profile:', error)
+    console.error("Error updating user profile:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Get User Role** (`/src/app/api/users/role/route.ts`):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0] { role }`,
       { email: session.user.email }
-    )
+    );
 
-    return NextResponse.json({ role: user?.role || 'runner' })
+    return NextResponse.json({ role: user?.role || "runner" });
   } catch (error) {
-    console.error('Error fetching user role:', error)
+    console.error("Error fetching user role:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบ API endpoints ด้วย Postman/curl
 - ทดสอบ authentication middleware
 - ทดสอบ data validation
@@ -706,59 +727,62 @@ export async function GET(request: NextRequest) {
 ## Phase 3: Training Plan Management APIs (วันที่ 3)
 
 ### Sub-Phase 3.1: Training Plan CRUD (เช้า)
+
 **เป้าหมาย**: สร้าง API สำหรับจัดการแผนการฝึกซ้อม
 
 **งานที่ต้องทำ**:
+
 - สร้าง validation schemas (`/src/lib/validations/trainingPlan.ts`):
+
   ```typescript
-  import { z } from 'zod'
-  
+  import { z } from "zod";
+
   export const trainingPlanSchema = z.object({
-    title: z.string().min(1, 'Title is required'),
+    title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
-    runnerId: z.string().min(1, 'Runner ID is required'),
+    runnerId: z.string().min(1, "Runner ID is required"),
     weekStart: z.string().datetime(),
     weekEnd: z.string().datetime(),
-    status: z.enum(['draft', 'active', 'completed', 'cancelled']).default('draft')
-  })
-  
-  export type TrainingPlan = z.infer<typeof trainingPlanSchema>
+    status: z
+      .enum(["draft", "active", "completed", "cancelled"])
+      .default("draft"),
+  });
+
+  export type TrainingPlan = z.infer<typeof trainingPlanSchema>;
   ```
 
 - สร้าง API endpoints:
 
 **Get Training Plans** (`/src/app/api/training-plans/route.ts`):
+
 ```typescript
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { client } from '@/lib/sanity'
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { client } from "@/lib/sanity";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const runnerId = searchParams.get('runnerId')
-    const status = searchParams.get('status')
+    const { searchParams } = new URL(request.url);
+    const runnerId = searchParams.get("runnerId");
+    const status = searchParams.get("status");
 
-    let query = `*[_type == "trainingPlan"`
-    const params: any = {}
+    let query = `*[_type == "trainingPlan"`;
+    const params: any = {};
 
     if (runnerId) {
-      query += ` && runnerId._ref == $runnerId`
-      params.runnerId = runnerId
+      query += ` && runnerId._ref == $runnerId`;
+      params.runnerId = runnerId;
     }
 
     if (status) {
-      query += ` && status == $status`
-      params.status = status
+      query += ` && status == $status`;
+      params.status = status;
     }
 
     query += `] {
@@ -779,129 +803,137 @@ export async function GET(request: NextRequest) {
         email
       },
       "sessions": *[_type == "trainingSession" && planId._ref == ^._id] | order(order asc)
-    } | order(weekStart desc)`
+    } | order(weekStart desc)`;
 
-    const plans = await client.fetch(query, params)
+    const plans = await client.fetch(query, params);
 
-    return NextResponse.json({ plans })
+    return NextResponse.json({ plans });
   } catch (error) {
-    console.error('Error fetching training plans:', error)
+    console.error("Error fetching training plans:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Create Training Plan** (`/src/app/api/training-plans/route.ts`):
+
 ```typescript
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Check if user is a coach
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0] { role }`,
       { email: session.user.email }
-    )
+    );
 
-    if (user?.role !== 'coach') {
+    if (user?.role !== "coach") {
       return NextResponse.json(
-        { error: 'Only coaches can create training plans' },
+        { error: "Only coaches can create training plans" },
         { status: 403 }
-      )
+      );
     }
 
-    const body = await request.json()
-    const validatedData = trainingPlanSchema.parse(body)
+    const body = await request.json();
+    const validatedData = trainingPlanSchema.parse(body);
 
     const plan = await client.create({
-      _type: 'trainingPlan',
+      _type: "trainingPlan",
       ...validatedData,
       coachId: {
-        _type: 'reference',
-        _ref: user._id
+        _type: "reference",
+        _ref: user._id,
       },
       runnerId: {
-        _type: 'reference',
-        _ref: validatedData.runnerId
-      }
-    })
+        _type: "reference",
+        _ref: validatedData.runnerId,
+      },
+    });
 
-    return NextResponse.json({ plan }, { status: 201 })
+    return NextResponse.json({ plan }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: "Validation error", details: error.errors },
         { status: 400 }
-      )
+      );
     }
 
-    console.error('Error creating training plan:', error)
+    console.error("Error creating training plan:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบการสร้างแผนการฝึกซ้อม
 - ทดสอบการ query แผนตาม runner
 - ทดสอบ authorization (coach only)
 - ทดสอบ data validation
 
 ### Sub-Phase 3.2: Training Session APIs (บ่าย)
+
 **เป้าหมาย**: สร้าง API สำหรับจัดการ training sessions
 
 **งานที่ต้องทำ**:
+
 - สร้าง validation schemas (`/src/lib/validations/trainingSession.ts`):
+
   ```typescript
   export const trainingSessionSchema = z.object({
-    planId: z.string().min(1, 'Plan ID is required'),
-    day: z.enum(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']),
+    planId: z.string().min(1, "Plan ID is required"),
+    day: z.enum([
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ]),
     date: z.string().datetime(),
-    type: z.enum(['easy', 'interval', 'tempo', 'long', 'recovery', 'rest']),
+    type: z.enum(["easy", "interval", "tempo", "long", "recovery", "rest"]),
     distance: z.string().optional(),
     duration: z.string().optional(),
     pace: z.string().optional(),
     notes: z.string().optional(),
-    order: z.number().min(0)
-  })
+    order: z.number().min(0),
+  });
   ```
 
 - สร้าง API endpoints สำหรับ sessions:
 
 **Get Sessions** (`/src/app/api/sessions/route.ts`):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const planId = searchParams.get('planId')
+    const { searchParams } = new URL(request.url);
+    const planId = searchParams.get("planId");
 
     if (!planId) {
       return NextResponse.json(
-        { error: 'Plan ID is required' },
+        { error: "Plan ID is required" },
         { status: 400 }
-      )
+      );
     }
 
     const sessions = await client.fetch(
@@ -921,114 +953,111 @@ export async function GET(request: NextRequest) {
         }
       } | order(order asc)`,
       { planId }
-    )
+    );
 
-    return NextResponse.json({ sessions })
+    return NextResponse.json({ sessions });
   } catch (error) {
-    console.error('Error fetching sessions:', error)
+    console.error("Error fetching sessions:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Create Session** (`/src/app/api/sessions/route.ts`):
+
 ```typescript
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const validatedData = trainingSessionSchema.parse(body)
+    const body = await request.json();
+    const validatedData = trainingSessionSchema.parse(body);
 
     const trainingSession = await client.create({
-      _type: 'trainingSession',
+      _type: "trainingSession",
       ...validatedData,
       planId: {
-        _type: 'reference',
-        _ref: validatedData.planId
-      }
-    })
+        _type: "reference",
+        _ref: validatedData.planId,
+      },
+    });
 
-    return NextResponse.json({ session: trainingSession }, { status: 201 })
+    return NextResponse.json({ session: trainingSession }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: "Validation error", details: error.errors },
         { status: 400 }
-      )
+      );
     }
 
-    console.error('Error creating session:', error)
+    console.error("Error creating session:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Bulk Create Sessions** (`/src/app/api/sessions/bulk/route.ts`):
+
 ```typescript
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { planId, sessions } = body
+    const body = await request.json();
+    const { planId, sessions } = body;
 
     if (!planId || !Array.isArray(sessions)) {
       return NextResponse.json(
-        { error: 'Invalid request body' },
+        { error: "Invalid request body" },
         { status: 400 }
-      )
+      );
     }
 
-    const validatedSessions = sessions.map(s => 
+    const validatedSessions = sessions.map((s) =>
       trainingSessionSchema.parse({ ...s, planId })
-    )
+    );
 
     const createdSessions = await Promise.all(
-      validatedSessions.map(sessionData => 
+      validatedSessions.map((sessionData) =>
         client.create({
-          _type: 'trainingSession',
+          _type: "trainingSession",
           ...sessionData,
           planId: {
-            _type: 'reference',
-            _ref: planId
-          }
+            _type: "reference",
+            _ref: planId,
+          },
         })
       )
-    )
+    );
 
-    return NextResponse.json({ sessions: createdSessions }, { status: 201 })
+    return NextResponse.json({ sessions: createdSessions }, { status: 201 });
   } catch (error) {
-    console.error('Error creating bulk sessions:', error)
+    console.error("Error creating bulk sessions:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบการสร้าง/แก้ไข sessions
 - ทดสอบ bulk operations
 - ทดสอบการ query sessions ตาม plan
@@ -1037,56 +1066,59 @@ export async function POST(request: NextRequest) {
 ## Phase 4: Workout Logging APIs (วันที่ 4)
 
 ### Sub-Phase 4.1: Workout Log CRUD (เช้า)
+
 **เป้าหมาย**: สร้าง API สำหรับบันทึกการซ้อม
 
 **งานที่ต้องทำ**:
+
 - สร้าง validation schemas (`/src/lib/validations/workoutLog.ts`):
+
   ```typescript
   export const workoutLogSchema = z.object({
-    sessionId: z.string().min(1, 'Session ID is required'),
-    status: z.enum(['completed', 'dnf', 'undone']),
+    sessionId: z.string().min(1, "Session ID is required"),
+    status: z.enum(["completed", "dnf", "undone"]),
     externalLink: z.string().url().optional(),
     actualDistance: z.number().positive().optional(),
     actualDuration: z.string().optional(),
     actualPace: z.string().optional(),
     notes: z.string().optional(),
-    feeling: z.enum(['excellent', 'good', 'okay', 'tired', 'exhausted']).optional(),
+    feeling: z
+      .enum(["excellent", "good", "okay", "tired", "exhausted"])
+      .optional(),
     injuries: z.array(z.string()).default([]),
     weather: z.string().optional(),
-    temperature: z.number().optional()
-  })
+    temperature: z.number().optional(),
+  });
   ```
 
 - สร้าง API endpoints:
 
 **Get Workout Logs** (`/src/app/api/workout-logs/route.ts`):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const sessionId = searchParams.get('sessionId')
-    const runnerId = searchParams.get('runnerId')
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get("sessionId");
+    const runnerId = searchParams.get("runnerId");
 
-    let query = `*[_type == "workoutLog"`
-    const params: any = {}
+    let query = `*[_type == "workoutLog"`;
+    const params: any = {};
 
     if (sessionId) {
-      query += ` && sessionId._ref == $sessionId`
-      params.sessionId = sessionId
+      query += ` && sessionId._ref == $sessionId`;
+      params.sessionId = sessionId;
     }
 
     if (runnerId) {
-      query += ` && runnerId._ref == $runnerId`
-      params.runnerId = runnerId
+      query += ` && runnerId._ref == $runnerId`;
+      params.runnerId = runnerId;
     }
 
     query += `] {
@@ -1117,152 +1149,151 @@ export async function GET(request: NextRequest) {
         name,
         email
       }
-    } | order(_createdAt desc)`
+    } | order(_createdAt desc)`;
 
-    const logs = await client.fetch(query, params)
+    const logs = await client.fetch(query, params);
 
-    return NextResponse.json({ logs })
+    return NextResponse.json({ logs });
   } catch (error) {
-    console.error('Error fetching workout logs:', error)
+    console.error("Error fetching workout logs:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Create Workout Log** (`/src/app/api/workout-logs/route.ts`):
+
 ```typescript
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0]`,
       { email: session.user.email }
-    )
+    );
 
-    const body = await request.json()
-    const validatedData = workoutLogSchema.parse(body)
+    const body = await request.json();
+    const validatedData = workoutLogSchema.parse(body);
 
     // Check if log already exists for this session
     const existingLog = await client.fetch(
       `*[_type == "workoutLog" && sessionId._ref == $sessionId && runnerId._ref == $runnerId][0]`,
       { sessionId: validatedData.sessionId, runnerId: user._id }
-    )
+    );
 
     if (existingLog) {
       return NextResponse.json(
-        { error: 'Workout log already exists for this session' },
+        { error: "Workout log already exists for this session" },
         { status: 409 }
-      )
+      );
     }
 
     const workoutLog = await client.create({
-      _type: 'workoutLog',
+      _type: "workoutLog",
       ...validatedData,
       sessionId: {
-        _type: 'reference',
-        _ref: validatedData.sessionId
+        _type: "reference",
+        _ref: validatedData.sessionId,
       },
       runnerId: {
-        _type: 'reference',
-        _ref: user._id
-      }
-    })
+        _type: "reference",
+        _ref: user._id,
+      },
+    });
 
-    return NextResponse.json({ log: workoutLog }, { status: 201 })
+    return NextResponse.json({ log: workoutLog }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: "Validation error", details: error.errors },
         { status: 400 }
-      )
+      );
     }
 
-    console.error('Error creating workout log:', error)
+    console.error("Error creating workout log:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบการบันทึก workout logs
 - ทดสอบการป้องกัน duplicate logs
 - ทดสอบ data validation
 - ทดสอบการ query logs
 
 ### Sub-Phase 4.2: History & Analytics APIs (บ่าย)
+
 **เป้าหมาย**: สร้าง API สำหรับประวัติและการวิเคราะห์
 
 **งานที่ต้องทำ**:
+
 - สร้าง API endpoints:
 
 **Get Workout History** (`/src/app/api/workout-logs/history/route.ts`):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const runnerId = searchParams.get('runnerId')
-    const startDate = searchParams.get('startDate')
-    const endDate = searchParams.get('endDate')
-    const status = searchParams.get('status')
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const { searchParams } = new URL(request.url);
+    const runnerId = searchParams.get("runnerId");
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
+    const status = searchParams.get("status");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "20");
 
-    let query = `*[_type == "workoutLog"`
-    const params: any = {}
+    let query = `*[_type == "workoutLog"`;
+    const params: any = {};
 
     if (runnerId) {
-      query += ` && runnerId._ref == $runnerId`
-      params.runnerId = runnerId
+      query += ` && runnerId._ref == $runnerId`;
+      params.runnerId = runnerId;
     }
 
     if (startDate) {
-      query += ` && _createdAt >= $startDate`
-      params.startDate = startDate
+      query += ` && _createdAt >= $startDate`;
+      params.startDate = startDate;
     }
 
     if (endDate) {
-      query += ` && _createdAt <= $endDate`
-      params.endDate = endDate
+      query += ` && _createdAt <= $endDate`;
+      params.endDate = endDate;
     }
 
     if (status) {
-      query += ` && status == $status`
-      params.status = status
+      query += ` && status == $status`;
+      params.status = status;
     }
 
-    const offset = (page - 1) * limit
-    query += `] | order(_createdAt desc) [$offset...$end]`
-    params.offset = offset
-    params.end = offset + limit - 1
+    const offset = (page - 1) * limit;
+    query += `] | order(_createdAt desc) [$offset...$end]`;
+    params.offset = offset;
+    params.end = offset + limit - 1;
 
-    const logs = await client.fetch(query, params)
+    const logs = await client.fetch(query, params);
 
     // Get total count for pagination
-    const totalQuery = query.replace(/\| order.*$/, '') + '] | length'
-    const total = await client.fetch(totalQuery, params)
+    const totalQuery = query.replace(/\| order.*$/, "") + "] | length";
+    const total = await client.fetch(totalQuery, params);
 
     return NextResponse.json({
       logs,
@@ -1270,36 +1301,34 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit)
-      }
-    })
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
-    console.error('Error fetching workout history:', error)
+    console.error("Error fetching workout history:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Get Runner Analytics** (`/src/app/api/analytics/runner/[id]/route.ts`):
+
 ```typescript
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const runnerId = params.id
+    const runnerId = params.id;
 
     // Get basic stats
     const stats = await client.fetch(
@@ -1324,20 +1353,21 @@ export async function GET(
         } | order(_createdAt desc)
       }`,
       { runnerId }
-    )
+    );
 
-    return NextResponse.json({ analytics: stats })
+    return NextResponse.json({ analytics: stats });
   } catch (error) {
-    console.error('Error fetching runner analytics:', error)
+    console.error("Error fetching runner analytics:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบการ query ประวัติ
 - ทดสอบ pagination
 - ทดสอบ analytics data
@@ -1346,42 +1376,43 @@ export async function GET(
 ## Phase 5: Feedback & Communication APIs (วันที่ 5)
 
 ### Sub-Phase 5.1: Feedback System (เช้า)
+
 **เป้าหมาย**: สร้าง API สำหรับระบบ feedback
 
 **งานที่ต้องทำ**:
+
 - สร้าง validation schemas (`/src/lib/validations/feedback.ts`):
+
   ```typescript
   export const feedbackSchema = z.object({
-    workoutLogId: z.string().min(1, 'Workout log ID is required'),
-    content: z.string().min(1, 'Content is required'),
-    type: z.enum(['praise', 'suggestion', 'concern', 'question']),
-    parentId: z.string().optional()
-  })
+    workoutLogId: z.string().min(1, "Workout log ID is required"),
+    content: z.string().min(1, "Content is required"),
+    type: z.enum(["praise", "suggestion", "concern", "question"]),
+    parentId: z.string().optional(),
+  });
   ```
 
 - สร้าง API endpoints:
 
 **Get Feedback** (`/src/app/api/feedback/route.ts`):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const workoutLogId = searchParams.get('workoutLogId')
+    const { searchParams } = new URL(request.url);
+    const workoutLogId = searchParams.get("workoutLogId");
 
     if (!workoutLogId) {
       return NextResponse.json(
-        { error: 'Workout log ID is required' },
+        { error: "Workout log ID is required" },
         { status: 400 }
-      )
+      );
     }
 
     const feedback = await client.fetch(
@@ -1422,181 +1453,184 @@ export async function GET(request: NextRequest) {
         } | order(_createdAt asc)
       } | order(_createdAt asc)`,
       { workoutLogId }
-    )
+    );
 
-    return NextResponse.json({ feedback })
+    return NextResponse.json({ feedback });
   } catch (error) {
-    console.error('Error fetching feedback:', error)
+    console.error("Error fetching feedback:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Create Feedback** (`/src/app/api/feedback/route.ts`):
+
 ```typescript
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0]`,
       { email: session.user.email }
-    )
+    );
 
-    const body = await request.json()
-    const validatedData = feedbackSchema.parse(body)
+    const body = await request.json();
+    const validatedData = feedbackSchema.parse(body);
 
     const feedback = await client.create({
-      _type: 'feedback',
+      _type: "feedback",
       ...validatedData,
       workoutLogId: {
-        _type: 'reference',
-        _ref: validatedData.workoutLogId
+        _type: "reference",
+        _ref: validatedData.workoutLogId,
       },
       authorId: {
-        _type: 'reference',
-        _ref: user._id
+        _type: "reference",
+        _ref: user._id,
       },
       ...(validatedData.parentId && {
         parentId: {
-          _type: 'reference',
-          _ref: validatedData.parentId
-        }
-      })
-    })
+          _type: "reference",
+          _ref: validatedData.parentId,
+        },
+      }),
+    });
 
     // Create notification for the recipient
     await createNotification({
-      type: 'new_feedback',
+      type: "new_feedback",
       workoutLogId: validatedData.workoutLogId,
-      authorId: user._id
-    })
+      authorId: user._id,
+    });
 
-    return NextResponse.json({ feedback }, { status: 201 })
+    return NextResponse.json({ feedback }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: "Validation error", details: error.errors },
         { status: 400 }
-      )
+      );
     }
 
-    console.error('Error creating feedback:', error)
+    console.error("Error creating feedback:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบการสร้าง/แก้ไข feedback
 - ทดสอบ comment threads
 - ทดสอบ nested replies
 - ทดสอบ notification creation
 
 ### Sub-Phase 5.2: Notification System (บ่าย)
+
 **เป้าหมาย**: สร้างระบบแจ้งเตือน
 
 **งานที่ต้องทำ**:
+
 - สร้าง Notification schema (`/sanity/schemas/notification.ts`):
+
   ```typescript
   export default {
-    name: 'notification',
-    title: 'Notification',
-    type: 'document',
+    name: "notification",
+    title: "Notification",
+    type: "document",
     fields: [
       {
-        name: 'userId',
-        title: 'User',
-        type: 'reference',
-        to: [{ type: 'user' }],
-        validation: Rule => Rule.required()
+        name: "userId",
+        title: "User",
+        type: "reference",
+        to: [{ type: "user" }],
+        validation: (Rule) => Rule.required(),
       },
       {
-        name: 'type',
-        title: 'Type',
-        type: 'string',
+        name: "type",
+        title: "Type",
+        type: "string",
         options: {
           list: [
-            { title: 'New Feedback', value: 'new_feedback' },
-            { title: 'Plan Assigned', value: 'plan_assigned' },
-            { title: 'Workout Completed', value: 'workout_completed' },
-            { title: 'Plan Updated', value: 'plan_updated' },
-            { title: 'Reminder', value: 'reminder' }
-          ]
+            { title: "New Feedback", value: "new_feedback" },
+            { title: "Plan Assigned", value: "plan_assigned" },
+            { title: "Workout Completed", value: "workout_completed" },
+            { title: "Plan Updated", value: "plan_updated" },
+            { title: "Reminder", value: "reminder" },
+          ],
         },
-        validation: Rule => Rule.required()
+        validation: (Rule) => Rule.required(),
       },
       {
-        name: 'title',
-        title: 'Title',
-        type: 'string',
-        validation: Rule => Rule.required()
+        name: "title",
+        title: "Title",
+        type: "string",
+        validation: (Rule) => Rule.required(),
       },
       {
-        name: 'message',
-        title: 'Message',
-        type: 'text',
-        validation: Rule => Rule.required()
+        name: "message",
+        title: "Message",
+        type: "text",
+        validation: (Rule) => Rule.required(),
       },
       {
-        name: 'read',
-        title: 'Read',
-        type: 'boolean',
-        initialValue: false
+        name: "read",
+        title: "Read",
+        type: "boolean",
+        initialValue: false,
       },
       {
-        name: 'actionUrl',
-        title: 'Action URL',
-        type: 'string'
+        name: "actionUrl",
+        title: "Action URL",
+        type: "string",
       },
       {
-        name: 'metadata',
-        title: 'Metadata',
-        type: 'object',
+        name: "metadata",
+        title: "Metadata",
+        type: "object",
         fields: [
-          { name: 'workoutLogId', type: 'string' },
-          { name: 'planId', type: 'string' },
-          { name: 'sessionId', type: 'string' }
-        ]
-      }
-    ]
-  }
+          { name: "workoutLogId", type: "string" },
+          { name: "planId", type: "string" },
+          { name: "sessionId", type: "string" },
+        ],
+      },
+    ],
+  };
   ```
 
 - สร้าง notification helper (`/src/lib/notifications.ts`):
+
   ```typescript
-  import { client } from './sanity'
-  
+  import { client } from "./sanity";
+
   interface CreateNotificationParams {
-    type: string
-    workoutLogId?: string
-    planId?: string
-    sessionId?: string
-    authorId: string
+    type: string;
+    workoutLogId?: string;
+    planId?: string;
+    sessionId?: string;
+    authorId: string;
   }
-  
+
   export async function createNotification(params: CreateNotificationParams) {
     try {
-      let title = ''
-      let message = ''
-      let actionUrl = ''
-      let recipientId = ''
-  
+      let title = "";
+      let message = "";
+      let actionUrl = "";
+      let recipientId = "";
+
       switch (params.type) {
-        case 'new_feedback':
+        case "new_feedback":
           if (params.workoutLogId) {
             const workoutLog = await client.fetch(
               `*[_type == "workoutLog" && _id == $id][0] {
@@ -1604,43 +1638,43 @@ export async function POST(request: NextRequest) {
                 "coach": sessionId->planId->coachId->{ _id, name }
               }`,
               { id: params.workoutLogId }
-            )
-            
+            );
+
             // Determine recipient (if author is coach, notify runner and vice versa)
             const author = await client.fetch(
               `*[_type == "user" && _id == $id][0] { role, name }`,
               { id: params.authorId }
-            )
-            
-            if (author.role === 'coach') {
-              recipientId = workoutLog.runner._id
-              title = 'ได้รับ feedback จากโค้ช'
-              message = `โค้ช ${author.name} ได้ให้ feedback เกี่ยวกับการซ้อมของคุณ`
+            );
+
+            if (author.role === "coach") {
+              recipientId = workoutLog.runner._id;
+              title = "ได้รับ feedback จากโค้ช";
+              message = `โค้ช ${author.name} ได้ให้ feedback เกี่ยวกับการซ้อมของคุณ`;
             } else {
-              recipientId = workoutLog.coach._id
-              title = 'ได้รับ feedback จากนักวิ่ง'
-              message = `${author.name} ได้ให้ feedback เกี่ยวกับการซ้อม`
+              recipientId = workoutLog.coach._id;
+              title = "ได้รับ feedback จากนักวิ่ง";
+              message = `${author.name} ได้ให้ feedback เกี่ยวกับการซ้อม`;
             }
-            
-            actionUrl = `/workout-log/${params.workoutLogId}`
+
+            actionUrl = `/workout-log/${params.workoutLogId}`;
           }
-          break
-          
-        case 'plan_assigned':
+          break;
+
+        case "plan_assigned":
           // Handle plan assignment notification
-          break
-          
-        case 'workout_completed':
+          break;
+
+        case "workout_completed":
           // Handle workout completion notification
-          break
+          break;
       }
-  
+
       if (recipientId) {
         await client.create({
-          _type: 'notification',
+          _type: "notification",
           userId: {
-            _type: 'reference',
-            _ref: recipientId
+            _type: "reference",
+            _ref: recipientId,
           },
           type: params.type,
           title,
@@ -1649,12 +1683,12 @@ export async function POST(request: NextRequest) {
           metadata: {
             workoutLogId: params.workoutLogId,
             planId: params.planId,
-            sessionId: params.sessionId
-          }
-        })
+            sessionId: params.sessionId,
+          },
+        });
       }
     } catch (error) {
-      console.error('Error creating notification:', error)
+      console.error("Error creating notification:", error);
     }
   }
   ```
@@ -1662,86 +1696,83 @@ export async function POST(request: NextRequest) {
 - สร้าง API endpoints:
 
 **Get Notifications** (`/src/app/api/notifications/route.ts`):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0]`,
       { email: session.user.email }
-    )
+    );
 
-    const { searchParams } = new URL(request.url)
-    const unreadOnly = searchParams.get('unreadOnly') === 'true'
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const { searchParams } = new URL(request.url);
+    const unreadOnly = searchParams.get("unreadOnly") === "true";
+    const limit = parseInt(searchParams.get("limit") || "20");
 
-    let query = `*[_type == "notification" && userId._ref == $userId`
-    
+    let query = `*[_type == "notification" && userId._ref == $userId`;
+
     if (unreadOnly) {
-      query += ` && read == false`
+      query += ` && read == false`;
     }
-    
-    query += `] | order(_createdAt desc) [0...$limit]`
+
+    query += `] | order(_createdAt desc) [0...$limit]`;
 
     const notifications = await client.fetch(query, {
       userId: user._id,
-      limit: limit - 1
-    })
+      limit: limit - 1,
+    });
 
-    return NextResponse.json({ notifications })
+    return NextResponse.json({ notifications });
   } catch (error) {
-    console.error('Error fetching notifications:', error)
+    console.error("Error fetching notifications:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Mark as Read** (`/src/app/api/notifications/[id]/read/route.ts`):
+
 ```typescript
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const notificationId = params.id
+    const notificationId = params.id;
 
     const notification = await client
       .patch(notificationId)
       .set({ read: true })
-      .commit()
+      .commit();
 
-    return NextResponse.json({ notification })
+    return NextResponse.json({ notification });
   } catch (error) {
-    console.error('Error marking notification as read:', error)
+    console.error("Error marking notification as read:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
 ```
 
 **Manual Testing**:
+
 - ทดสอบการสร้าง notifications
 - ทดสอบการ mark as read
 - ทดสอบ notification queries
@@ -1750,92 +1781,102 @@ export async function PUT(
 ## Phase 6: Performance & Security (วันที่ 6)
 
 ### Sub-Phase 6.1: Performance Optimization (เช้า)
+
 **เป้าหมาย**: ปรับปรุงประสิทธิภาพของ API
 
 **งานที่ต้องทำ**:
+
 - สร้าง caching layer (`/src/lib/cache.ts`):
+
   ```typescript
-  import { client } from './sanity'
-  
+  import { client } from "./sanity";
+
   // Simple in-memory cache
-  const cache = new Map<string, { data: any; timestamp: number; ttl: number }>()
-  
+  const cache = new Map<
+    string,
+    { data: any; timestamp: number; ttl: number }
+  >();
+
   export async function getCachedData<T>(
     key: string,
     fetcher: () => Promise<T>,
     ttl: number = 300000 // 5 minutes default
   ): Promise<T> {
-    const cached = cache.get(key)
-    
+    const cached = cache.get(key);
+
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
-      return cached.data
+      return cached.data;
     }
-    
-    const data = await fetcher()
+
+    const data = await fetcher();
     cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl
-    })
-    
-    return data
+      ttl,
+    });
+
+    return data;
   }
-  
+
   export function invalidateCache(pattern?: string) {
     if (pattern) {
       for (const key of cache.keys()) {
         if (key.includes(pattern)) {
-          cache.delete(key)
+          cache.delete(key);
         }
       }
     } else {
-      cache.clear()
+      cache.clear();
     }
   }
   ```
 
 - สร้าง rate limiting middleware (`/src/lib/rateLimit.ts`):
+
   ```typescript
-  import { NextRequest, NextResponse } from 'next/server'
-  
-  const requests = new Map<string, { count: number; resetTime: number }>()
-  
+  import { NextRequest, NextResponse } from "next/server";
+
+  const requests = new Map<string, { count: number; resetTime: number }>();
+
   export function rateLimit({
     windowMs = 15 * 60 * 1000, // 15 minutes
-    max = 100 // limit each IP to 100 requests per windowMs
+    max = 100, // limit each IP to 100 requests per windowMs
   } = {}) {
     return (request: NextRequest) => {
-      const ip = request.ip || 'unknown'
-      const now = Date.now()
-      const windowStart = now - windowMs
-      
+      const ip = request.ip || "unknown";
+      const now = Date.now();
+      const windowStart = now - windowMs;
+
       // Clean old entries
       for (const [key, value] of requests.entries()) {
         if (value.resetTime < now) {
-          requests.delete(key)
+          requests.delete(key);
         }
       }
-      
-      const current = requests.get(ip) || { count: 0, resetTime: now + windowMs }
-      
+
+      const current = requests.get(ip) || {
+        count: 0,
+        resetTime: now + windowMs,
+      };
+
       if (current.resetTime < now) {
-        current.count = 1
-        current.resetTime = now + windowMs
+        current.count = 1;
+        current.resetTime = now + windowMs;
       } else {
-        current.count++
+        current.count++;
       }
-      
-      requests.set(ip, current)
-      
+
+      requests.set(ip, current);
+
       if (current.count > max) {
         return NextResponse.json(
-          { error: 'Too many requests' },
+          { error: "Too many requests" },
           { status: 429 }
-        )
+        );
       }
-      
-      return null // Allow request
-    }
+
+      return null; // Allow request
+    };
   }
   ```
 
@@ -1843,167 +1884,175 @@ export async function PUT(
   ```typescript
   // Example: Cached training plans
   export async function GET(request: NextRequest) {
-    const rateLimitResult = rateLimit()(request)
-    if (rateLimitResult) return rateLimitResult
-    
-    const { searchParams } = new URL(request.url)
-    const runnerId = searchParams.get('runnerId')
-    
-    const cacheKey = `training-plans-${runnerId}`
-    
+    const rateLimitResult = rateLimit()(request);
+    if (rateLimitResult) return rateLimitResult;
+
+    const { searchParams } = new URL(request.url);
+    const runnerId = searchParams.get("runnerId");
+
+    const cacheKey = `training-plans-${runnerId}`;
+
     const plans = await getCachedData(
       cacheKey,
       () => client.fetch(/* your query */),
       300000 // 5 minutes
-    )
-    
-    return NextResponse.json({ plans })
+    );
+
+    return NextResponse.json({ plans });
   }
   ```
 
 **Manual Testing**:
+
 - ทดสอบ response times
 - ทดสอบ caching behavior
 - ทดสอบ rate limiting
 - ทดสอบ concurrent requests
 
 ### Sub-Phase 6.2: Security & Validation (บ่าย)
+
 **เป้าหมาย**: เสริมความปลอดภัยและ validation
 
 **งานที่ต้องทำ**:
+
 - สร้าง security middleware (`/src/lib/security.ts`):
+
   ```typescript
-  import { NextRequest, NextResponse } from 'next/server'
-  import { getServerSession } from 'next-auth'
-  import { client } from './sanity'
-  
+  import { NextRequest, NextResponse } from "next/server";
+  import { getServerSession } from "next-auth";
+  import { client } from "./sanity";
+
   export async function requireAuth(request: NextRequest) {
-    const session = await getServerSession()
-    
+    const session = await getServerSession();
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
-    return session
+
+    return session;
   }
-  
-  export async function requireRole(request: NextRequest, allowedRoles: string[]) {
-    const session = await requireAuth(request)
-    
+
+  export async function requireRole(
+    request: NextRequest,
+    allowedRoles: string[]
+  ) {
+    const session = await requireAuth(request);
+
     if (session instanceof NextResponse) {
-      return session // Return error response
+      return session; // Return error response
     }
-    
+
     const user = await client.fetch(
       `*[_type == "user" && email == $email][0] { role }`,
       { email: session.user.email }
-    )
-    
+    );
+
     if (!allowedRoles.includes(user?.role)) {
-      return NextResponse.json(
-        { error: 'Forbidden' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-    
-    return { session, user }
+
+    return { session, user };
   }
-  
+
   export function sanitizeInput(input: any): any {
-    if (typeof input === 'string') {
-      return input.trim().replace(/<script[^>]*>.*?<\/script>/gi, '')
+    if (typeof input === "string") {
+      return input.trim().replace(/<script[^>]*>.*?<\/script>/gi, "");
     }
-    
+
     if (Array.isArray(input)) {
-      return input.map(sanitizeInput)
+      return input.map(sanitizeInput);
     }
-    
-    if (typeof input === 'object' && input !== null) {
-      const sanitized: any = {}
+
+    if (typeof input === "object" && input !== null) {
+      const sanitized: any = {};
       for (const [key, value] of Object.entries(input)) {
-        sanitized[key] = sanitizeInput(value)
+        sanitized[key] = sanitizeInput(value);
       }
-      return sanitized
+      return sanitized;
     }
-    
-    return input
+
+    return input;
   }
   ```
 
 - สร้าง API response wrapper (`/src/lib/apiResponse.ts`):
+
   ```typescript
-  import { NextResponse } from 'next/server'
-  
+  import { NextResponse } from "next/server";
+
   export function successResponse(data: any, status: number = 200) {
-    return NextResponse.json({
-      success: true,
-      data,
-      timestamp: new Date().toISOString()
-    }, { status })
+    return NextResponse.json(
+      {
+        success: true,
+        data,
+        timestamp: new Date().toISOString(),
+      },
+      { status }
+    );
   }
-  
+
   export function errorResponse(
     message: string,
     status: number = 500,
     details?: any
   ) {
-    return NextResponse.json({
-      success: false,
-      error: {
-        message,
-        details,
-        timestamp: new Date().toISOString()
-      }
-    }, { status })
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          message,
+          details,
+          timestamp: new Date().toISOString(),
+        },
+      },
+      { status }
+    );
   }
-  
+
   export function validationErrorResponse(errors: any[]) {
-    return errorResponse(
-      'Validation failed',
-      400,
-      { validationErrors: errors }
-    )
+    return errorResponse("Validation failed", 400, {
+      validationErrors: errors,
+    });
   }
   ```
 
 - สร้าง logging system (`/src/lib/logger.ts`):
+
   ```typescript
   export enum LogLevel {
-    ERROR = 'error',
-    WARN = 'warn',
-    INFO = 'info',
-    DEBUG = 'debug'
+    ERROR = "error",
+    WARN = "warn",
+    INFO = "info",
+    DEBUG = "debug",
   }
-  
+
   export function log(level: LogLevel, message: string, meta?: any) {
-    const timestamp = new Date().toISOString()
+    const timestamp = new Date().toISOString();
     const logEntry = {
       timestamp,
       level,
       message,
-      meta
-    }
-    
+      meta,
+    };
+
     // In production, send to external logging service
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       // Send to logging service (e.g., Sentry, LogRocket)
     } else {
-      console.log(JSON.stringify(logEntry, null, 2))
+      console.log(JSON.stringify(logEntry, null, 2));
     }
   }
-  
+
   export const logger = {
     error: (message: string, meta?: any) => log(LogLevel.ERROR, message, meta),
     warn: (message: string, meta?: any) => log(LogLevel.WARN, message, meta),
     info: (message: string, meta?: any) => log(LogLevel.INFO, message, meta),
-    debug: (message: string, meta?: any) => log(LogLevel.DEBUG, message, meta)
-  }
+    debug: (message: string, meta?: any) => log(LogLevel.DEBUG, message, meta),
+  };
   ```
 
 **Manual Testing**:
+
 - ทดสอบ authentication/authorization
 - ทดสอบ input sanitization
 - ทดสอบ error handling
@@ -2016,22 +2065,26 @@ export async function PUT(
 ### API Contracts
 
 **Authentication**:
+
 - `POST /api/auth/signin` - OAuth login
 - `POST /api/auth/signout` - Logout
 - `GET /api/auth/session` - Get current session
 
 **Users**:
+
 - `GET /api/users/profile` - Get user profile
 - `PUT /api/users/profile` - Update user profile
 - `GET /api/users/role` - Get user role
 
 **Training Plans**:
+
 - `GET /api/training-plans` - Get training plans
 - `POST /api/training-plans` - Create training plan (coach only)
 - `PUT /api/training-plans/[id]` - Update training plan
 - `DELETE /api/training-plans/[id]` - Delete training plan
 
 **Training Sessions**:
+
 - `GET /api/sessions` - Get sessions by plan
 - `POST /api/sessions` - Create session
 - `POST /api/sessions/bulk` - Create multiple sessions
@@ -2039,42 +2092,52 @@ export async function PUT(
 - `DELETE /api/sessions/[id]` - Delete session
 
 **Workout Logs**:
+
 - `GET /api/workout-logs` - Get workout logs
 - `POST /api/workout-logs` - Create workout log
 - `PUT /api/workout-logs/[id]` - Update workout log
 - `GET /api/workout-logs/history` - Get workout history
 
 **Feedback**:
+
 - `GET /api/feedback` - Get feedback by workout log
 - `POST /api/feedback` - Create feedback
 - `PUT /api/feedback/[id]` - Update feedback
 
 **Notifications**:
+
 - `GET /api/notifications` - Get user notifications
 - `PUT /api/notifications/[id]/read` - Mark as read
 
 **Analytics**:
+
 - `GET /api/analytics/runner/[id]` - Get runner analytics
 - `GET /api/analytics/coach/[id]` - Get coach analytics
 
 ### Response Formats
 
 **Success Response**:
+
 ```json
 {
   "success": true,
-  "data": { /* response data */ },
+  "data": {
+    /* response data */
+  },
   "timestamp": "2024-01-01T00:00:00.000Z"
 }
 ```
 
 **Error Response**:
+
 ```json
 {
   "success": false,
   "error": {
     "message": "Error description",
-    "details": { /* additional error info */ },
+    "details": {
+      /* additional error info */
+    },
     "timestamp": "2024-01-01T00:00:00.000Z"
   }
 }
@@ -2087,36 +2150,42 @@ export async function PUT(
 ### Manual Testing Checklist
 
 **Day 1 - Foundation**:
+
 - [ ] Sanity Studio accessible
 - [ ] Environment variables working
 - [ ] Schemas created successfully
 - [ ] Basic CRUD operations in Studio
 
 **Day 2 - Authentication**:
+
 - [ ] OAuth login working
 - [ ] Session persistence
 - [ ] User profile creation
 - [ ] Role-based access
 
 **Day 3 - Training Plans**:
+
 - [ ] Create/read training plans
 - [ ] Coach-only restrictions
 - [ ] Session management
 - [ ] Bulk operations
 
 **Day 4 - Workout Logs**:
+
 - [ ] Log creation/updates
 - [ ] History queries
 - [ ] Analytics calculations
 - [ ] Data validation
 
 **Day 5 - Communication**:
+
 - [ ] Feedback system
 - [ ] Notification creation
 - [ ] Real-time updates
 - [ ] Comment threads
 
 **Day 6 - Performance**:
+
 - [ ] Response times < 500ms
 - [ ] Rate limiting working
 - [ ] Caching effective
@@ -2125,6 +2194,7 @@ export async function PUT(
 ### API Testing Tools
 
 **Postman Collection**:
+
 ```json
 {
   "info": {
@@ -2155,12 +2225,14 @@ export async function PUT(
 ## 📊 Success Metrics
 
 ### Performance Targets
+
 - API response time: < 500ms (95th percentile)
 - Database query time: < 200ms
 - Concurrent users: 100+
 - Uptime: 99.9%
 
 ### Security Checklist
+
 - [ ] Input validation on all endpoints
 - [ ] Rate limiting implemented
 - [ ] Authentication required for protected routes
@@ -2170,6 +2242,7 @@ export async function PUT(
 - [ ] CORS properly configured
 
 ### Code Quality
+
 - [ ] TypeScript strict mode
 - [ ] Zod validation schemas
 - [ ] Error handling in all endpoints
@@ -2181,6 +2254,7 @@ export async function PUT(
 ## 🚀 Deployment Preparation
 
 ### Environment Variables
+
 ```bash
 # Sanity
 SANITY_PROJECT_ID=your-project-id
@@ -2203,6 +2277,7 @@ REDIS_URL=redis://localhost:6379
 ```
 
 ### Vercel Deployment
+
 ```json
 {
   "builds": [
@@ -2224,12 +2299,14 @@ REDIS_URL=redis://localhost:6379
 ## 📚 Resources
 
 ### Documentation
+
 - [Sanity.io Documentation](https://www.sanity.io/docs)
 - [NextAuth.js Documentation](https://next-auth.js.org/)
 - [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
 - [Zod Validation](https://zod.dev/)
 
 ### Useful Commands
+
 ```bash
 # Development
 pnpm dev                    # Start development server
