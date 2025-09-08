@@ -3,25 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3001",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start --port 3001",
+    "lint": "eslint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@sanity/client": "^7.11.0",
+    "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^3.99.0",
+    "dotenv": "^17.2.2",
+    "next": "15.5.2",
+    "next-auth": "^4.24.5",
+    "next-auth-sanity": "^1.0.10",
+    "next-sanity": "^9.12.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "sanity": "^3.99.0",
+    "styled-components": "^6.1.19",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@sanity/cli": "^3.57.0",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

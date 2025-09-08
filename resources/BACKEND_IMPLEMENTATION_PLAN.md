@@ -14,13 +14,15 @@
 
 ## 🛠 Tech Stack
 
-- **Framework**: Next.js 14 with TypeScript
-- **CMS**: Sanity.io
-- **Authentication**: NextAuth.js
+- **Framework**: Next.js 15.5.2 with TypeScript 5
+- **CMS**: Sanity.io (ต้องติดตั้ง)
+- **Authentication**: NextAuth.js (ต้องติดตั้ง)
 - **API**: Next.js API Routes
-- **Validation**: Zod
+- **Validation**: Zod (ต้องติดตั้ง)
+- **Styling**: Tailwind CSS 4 (ติดตั้งแล้ว)
 - **Caching**: Redis (optional)
-- **Package Manager**: pnpm
+- **Package Manager**: pnpm (ใช้ workspace)
+- **Monorepo**: pnpm workspace (ตั้งค่าแล้ว)
 
 ---
 
@@ -31,30 +33,40 @@
 ### Sub-Phase 1.1: Project Setup & Sanity Configuration (เช้า)
 **เป้าหมาย**: ตั้งค่าโปรเจกต์และ Sanity CMS
 
+**สถานะปัจจุบัน**: 
+- ✅ Next.js 15.5.2 project ใน `/apps/backend` (ตั้งค่าแล้ว)
+- ✅ TypeScript, Tailwind CSS (ติดตั้งแล้ว)
+- ❌ Sanity dependencies (ยังไม่ได้ติดตั้ง)
+
 **งานที่ต้องทำ**:
-- ตั้งค่า Next.js project ใน `/apps/backend`
-- ติดตั้ง dependencies:
+- ติดตั้ง dependencies ใน `/apps/backend`:
   ```bash
+  cd apps/backend
   pnpm add @sanity/client @sanity/image-url
   pnpm add next-auth @auth/sanity-adapter
   pnpm add zod
   pnpm add -D @sanity/cli
   ```
-- สร้าง Sanity project:
+- สร้าง Sanity project (แยกจาก Next.js backend):
   ```bash
-  npx @sanity/cli init
+  # ใน root directory
+  npx @sanity/cli init studio-nachoeymaiwang
+  # หรือใช้ existing project ID จาก sanity-prompt.md: u0rtdnil
   ```
-- ตั้งค่า environment variables:
+- ตั้งค่า environment variables (ใช้ไฟล์ .env.example ที่สร้างไว้แล้ว):
   ```bash
-  # .env.local
-  SANITY_PROJECT_ID=your-project-id
-  SANITY_DATASET=production
-  SANITY_API_TOKEN=your-api-token
-  SANITY_STUDIO_URL=http://localhost:3333
+  # ใน /apps/backend/
+  cp .env.example .env.local
+  # แก้ไขค่าต่างๆ ตามความเหมาะสม
   ```
+  
+  **ค่าสำคัญที่ต้องตั้ง**:
+  - `SANITY_PROJECT_ID=u0rtdnil` (จาก sanity-prompt.md)
+  - `NEXTAUTH_URL=http://localhost:3001` (backend port)
+  - `FRONTEND_URL=http://localhost:3000` (frontend port)
 - สร้าง Sanity client configuration:
   ```typescript
-  // lib/sanity.ts
+  // /apps/backend/src/lib/sanity.ts
   import { createClient } from '@sanity/client'
   
   export const client = createClient({
@@ -64,10 +76,19 @@
     useCdn: false,
     apiVersion: '2024-01-01'
   })
+  
+  // Type definitions
+  export interface SanityConfig {
+    projectId: string
+    dataset: string
+    apiVersion: string
+  }
   ```
 
 **Manual Testing**:
-- รัน `pnpm sanity dev` และเช็คว่า Sanity Studio เข้าถึงได้
+- รัน `cd apps/backend && pnpm install` เพื่อติดตั้ง dependencies
+- รัน `cd apps/backend && pnpm dev` เช็คว่า backend server รันที่ port 3001
+- รัน `cd studio-nachoeymaiwang && pnpm sanity dev` เช็คว่า Sanity Studio เข้าถึงได้ที่ port 3333
 - ทดสอบการเชื่อมต่อกับ Sanity API
 - ทดสอบ environment variables
 
