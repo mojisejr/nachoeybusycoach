@@ -41,5 +41,6 @@ export const config = {
     "/admin/:path*",
     "/coach/:path*",
     "/api/protected/:path*",
+    "/api/users/:path*",
   ],
 };
