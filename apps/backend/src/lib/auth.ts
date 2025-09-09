@@ -17,6 +17,7 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
+  debug: false, // Disable debug mode to prevent _log endpoint calls
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
