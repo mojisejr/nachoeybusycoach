@@ -1065,7 +1065,7 @@ export async function POST(request: NextRequest) {
 
 ## Phase 4: Workout Logging APIs (วันที่ 4)
 
-### Sub-Phase 4.1: Workout Log CRUD (เช้า)
+### Sub-Phase 4.1: Workout Log CRUD (เช้า) Done
 
 **เป้าหมาย**: สร้าง API สำหรับบันทึกการซ้อม
 

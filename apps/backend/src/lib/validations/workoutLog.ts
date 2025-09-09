@@ -90,5 +90,5 @@ export type WorkoutLogResponse = z.infer<typeof workoutLogResponseSchema>;
 /**
  * Partial workout log schema for PATCH operations
  */
-export const partialWorkoutLogSchema = workoutLogSchema.partial();
-export type PartialWorkoutLog = z.infer<typeof partialWorkoutLogSchema>;
+export const workoutLogPartialSchema = baseWorkoutLogSchema.partial();
+export type WorkoutLogPartial = z.infer<typeof workoutLogPartialSchema>;
