@@ -1234,7 +1234,7 @@ export async function POST(request: NextRequest) {
 - ทดสอบ data validation
 - ทดสอบการ query logs
 
-### Sub-Phase 4.2: History & Analytics APIs (บ่าย)
+### Sub-Phase 4.2: History & Analytics APIs (บ่าย) Done
 
 **เป้าหมาย**: สร้าง API สำหรับประวัติและการวิเคราะห์
 
