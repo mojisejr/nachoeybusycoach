@@ -1375,7 +1375,7 @@ export async function GET(
 
 ## Phase 5: Feedback & Communication APIs (วันที่ 5)
 
-### Sub-Phase 5.1: Feedback System (เช้า)
+### Sub-Phase 5.1: Feedback System (เช้า) Done
 
 **เป้าหมาย**: สร้าง API สำหรับระบบ feedback
 
@@ -1536,7 +1536,7 @@ export async function POST(request: NextRequest) {
 - ทดสอบ nested replies
 - ทดสอบ notification creation
 
-### Sub-Phase 5.2: Notification System (บ่าย)
+### Sub-Phase 5.2: Notification System (บ่าย) Done
 
 **เป้าหมาย**: สร้างระบบแจ้งเตือน
 
