@@ -1068,6 +1068,46 @@ Based on comprehensive retrospective analysis from the project implementation ph
 
 ## 🔧 Troubleshooting
 
+### Frontend Authentication Errors
+
+**Known Issues from Sub-Phase 1.2 Authentication Integration**:
+
+Based on retrospective analysis from 2025-01-09, the following frontend authentication errors have been identified and require attention:
+
+**NextAuth Configuration Issues**:
+- **CLIENT_FETCH_ERROR**: Resolved by adding frontend proxy route at `/apps/frontend/src/app/api/auth/[...nextauth]/route.ts`
+- **404 Errors**: Fixed by removing `basePath="/api/auth"` from SessionProvider in AuthProvider.tsx
+- **Environment Configuration**: Ensure NEXTAUTH_URL is properly configured in both frontend and backend
+
+**Remaining Frontend Issues to Address**:
+- **Session State Management**: Frontend session state may not persist correctly across page refreshes
+- **Authentication Flow**: OAuth callback handling needs verification for all providers (Google, Facebook, Line)
+- **Error Boundaries**: Implement proper error handling for authentication failures
+- **Loading States**: Add proper loading indicators during authentication processes
+
+**Debugging Commands**:
+```bash
+# Check NextAuth configuration
+echo $NEXTAUTH_URL
+echo $NEXTAUTH_SECRET
+
+# Verify frontend proxy route exists
+ls -la apps/frontend/src/app/api/auth/[...nextauth]/
+
+# Check for authentication errors in browser console
+# Look for CLIENT_FETCH_ERROR or 404 errors
+
+# Test authentication endpoints
+curl -I http://localhost:3000/api/auth/session
+curl -I http://localhost:3001/api/auth/session
+```
+
+**Resolution Priority**:
+1. **High**: Fix session persistence issues
+2. **High**: Verify OAuth provider configurations
+3. **Medium**: Implement comprehensive error boundaries
+4. **Medium**: Add loading states and user feedback
+
 ### Build Failures
 
 **Common Issues and Solutions**:
