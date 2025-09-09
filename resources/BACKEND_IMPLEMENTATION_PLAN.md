@@ -100,7 +100,7 @@
 - ทดสอบการเชื่อมต่อกับ Sanity API
 - ทดสอบ environment variables
 
-### Sub-Phase 1.2: Schema Definition (บ่าย)
+### Sub-Phase 1.2: Schema Definition (บ่าย) Done
 
 **เป้าหมาย**: สร้าง Sanity schemas ตาม PRD
 
@@ -482,7 +482,7 @@ export default {
 
 ## Phase 2: Authentication & User Management (วันที่ 2)
 
-### Sub-Phase 2.1: NextAuth.js Setup (เช้า)
+### Sub-Phase 2.1: NextAuth.js Setup (เช้า) Done
 
 **เป้าหมาย**: ตั้งค่าระบบ Authentication
 
@@ -566,7 +566,7 @@ export default {
 - ทดสอบ session persistence
 - ทดสอบ middleware protection
 
-### Sub-Phase 2.2: User API Endpoints (บ่าย)
+### Sub-Phase 2.2: User API Endpoints (บ่าย) Done
 
 **เป้าหมาย**: สร้าง API endpoints สำหรับจัดการ users
 
@@ -726,7 +726,7 @@ export async function GET(request: NextRequest) {
 
 ## Phase 3: Training Plan Management APIs (วันที่ 3)
 
-### Sub-Phase 3.1: Training Plan CRUD (เช้า)
+### Sub-Phase 3.1: Training Plan CRUD (เช้า) Done
 
 **เป้าหมาย**: สร้าง API สำหรับจัดการแผนการฝึกซ้อม
 
@@ -883,7 +883,7 @@ export async function POST(request: NextRequest) {
 - ทดสอบ authorization (coach only)
 - ทดสอบ data validation
 
-### Sub-Phase 3.2: Training Session APIs (บ่าย)
+### Sub-Phase 3.2: Training Session APIs (บ่าย) Done
 
 **เป้าหมาย**: สร้าง API สำหรับจัดการ training sessions
 
@@ -1881,6 +1881,7 @@ export async function PUT(
   ```
 
 - ปรับปรุง API endpoints ให้ใช้ caching:
+
   ```typescript
   // Example: Cached training plans
   export async function GET(request: NextRequest) {
