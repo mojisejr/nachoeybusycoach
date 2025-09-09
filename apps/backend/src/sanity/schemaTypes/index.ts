@@ -4,6 +4,7 @@ import trainingPlan from './trainingPlan';
 import trainingSession from './trainingSession';
 import workoutLog from './workoutLog';
 import feedback from './feedback';
+import notification from './notification';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -12,5 +13,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     trainingSession,
     workoutLog,
     feedback,
+    notification,
   ],
 }
