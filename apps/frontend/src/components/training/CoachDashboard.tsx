@@ -101,8 +101,15 @@ export default function CoachDashboard({
     });
   };
 
+  // Create a mapping from planId to runnerId for demo purposes
+  const planToRunnerMap: Record<string, string> = {
+    'plan-1': '1',
+    'plan-2': '2',
+    'plan-3': '3'
+  };
+
   const getRunnerSessions = (runnerId: string) => {
-    return sessions.filter(session => session.workoutLog?.runnerId === runnerId);
+    return sessions.filter(session => planToRunnerMap[session.planId] === runnerId);
   };
 
   const getRunnerTodaySessions = (runnerId: string) => {
@@ -112,7 +119,7 @@ export default function CoachDashboard({
     return sessions.filter(session => {
       const sessionDate = new Date(session.date);
       sessionDate.setHours(0, 0, 0, 0);
-      return session.workoutLog?.runnerId === runnerId && sessionDate.getTime() === today.getTime();
+      return planToRunnerMap[session.planId] === runnerId && sessionDate.getTime() === today.getTime();
     });
   };
 
