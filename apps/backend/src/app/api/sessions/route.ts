@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { trainingSessionQuerySchema } from 'types';
+import { trainingSessionQuerySchema } from '@nachoeybusycoach/types';
 import { client } from '@/sanity/lib/client';
 
 // Import auth configuration
@@ -238,7 +238,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     // Import the create schema
-    const { createTrainingSessionSchema } = await import('types');
+    const { createTrainingSessionSchema } = await import('@nachoeybusycoach/types');
     
     // Validate request body
     const validatedData = createTrainingSessionSchema.safeParse(body);

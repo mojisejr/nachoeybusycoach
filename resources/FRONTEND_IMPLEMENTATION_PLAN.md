@@ -2,24 +2,48 @@
 
 ## 📋 Overview
 
-แผนการพัฒนา Frontend สำหรับแอปพลิเคชัน "นาเชยไม่เคยมีโค้ชว่าง" โดยแบ่งเป็น 6 วัน แต่ละวันแบ่งเป็น sub-phase เช้า-บ่าย ที่สามารถทำงานแยกจาก Backend ได้
+แผนการพัฒนา Frontend สำหรับแอปพลิเคชัน "นาเชยไม่เคยมีโค้ชว่าง" โดยแบ่งเป็น 6 วัน แต่ละวันแบ่งเป็น sub-phase เช้า-บ่าย ที่เชื่อมต่อกับ Backend ที่พัฒนาแล้ว
 
 ## 🎯 Core Principles
 
-- **Mock-First Approach**: ใช้ Mock Data ตั้งแต่วันแรกเพื่อไม่ต้องรอ Backend
+- **Backend-First Integration**: เชื่อมต่อกับ Backend APIs ที่พัฒนาแล้วเสร็จ
 - **Component-Driven**: สร้าง reusable components ที่ใช้ร่วมกันได้
 - **Daily Completion**: แต่ละ sub-phase จบภายใน 1 วัน
-- **Self-Testing**: สามารถทดสอบได้ด้วยตัวเองในแต่ละ phase
+- **Real-Time Testing**: ทดสอบกับ Backend APIs จริง
 
-## 🛠 Tech Stack
+## 🛠 Tech Stack (Updated)
 
-- **Framework**: Next.js 14 with TypeScript
-- **Styling**: Tailwind CSS + DaisyUI
+- **Framework**: Next.js 15.5.2 with TypeScript 5
+- **React**: React 19.1.0 with React DOM 19.1.0
+- **Styling**: Tailwind CSS 4 + DaisyUI
 - **Charts**: Tremor
-- **Forms**: React Hook Form
+- **Forms**: React Hook Form + Zod validation
 - **State Management**: Zustand
-- **Authentication**: NextAuth.js
+- **Authentication**: NextAuth.js 5 (integrated with backend)
 - **Package Manager**: pnpm
+
+## 🔗 Backend Integration Status
+
+✅ **Completed Backend APIs**:
+- Authentication (NextAuth.js)
+- User Profile Management
+- Training Plans CRUD
+- Training Sessions CRUD
+- Workout Logs CRUD
+- Feedback System
+- Notification System
+- Analytics & History APIs
+
+**Available API Endpoints**:
+- `/api/auth/[...nextauth]` - Authentication
+- `/api/users/profile` - User profile management
+- `/api/users/role` - User role management
+- `/api/training-plans` - Training plan CRUD
+- `/api/sessions` - Training session CRUD
+- `/api/workout-logs` - Workout log CRUD
+- `/api/feedback` - Feedback system
+- `/api/notifications` - Notification system
+- `/api/analytics/runner/[id]` - Analytics & history
 
 ---
 
@@ -28,89 +52,386 @@
 ## Phase 1: Foundation & Authentication (วันที่ 1)
 
 ### Sub-Phase 1.1: Project Setup & UI Foundation (เช้า)
-**เป้าหมาย**: ตั้งค่าโปรเจกต์และสร้าง UI components พื้นฐาน
+**เป้าหมาย**: ตั้งค่าโปรเจกต์สมัยใหม่และสร้าง UI components พื้นฐานพร้อม brand identity
 
 **งานที่ต้องทำ**:
-- ตั้งค่า Next.js 14 project ใน `/apps/frontend`
-- ติดตั้ง dependencies:
+
+#### 1. Project Dependencies Update
+- ✅ **Already Setup**: Next.js 15.5.2, React 19.1.0, TypeScript 5, Tailwind CSS 4
+- **Additional dependencies needed**:
   ```bash
-  pnpm add tailwindcss daisyui @tremor/react
-  pnpm add react-hook-form @hookform/resolvers
-  pnpm add zustand next-auth
-  pnpm add -D @types/node typescript
+  # UI Components และ Charts
+  pnpm add daisyui@4 @tailwindcss/typography
+  pnpm add @tremor/react lucide-react
+  
+  # Form และ Validation
+  pnpm add react-hook-form @hookform/resolvers zod
+  
+  # State Management และ Auth
+  pnpm add zustand@4 next-auth@5
+  
+  # Development Tools
+  pnpm add -D prettier @types/bcryptjs
+  
+  # Backend Integration
+  pnpm add axios swr
   ```
-- สร้าง shared UI components ใน `/packages/ui`:
-  - `Button.tsx` - ปุ่มพื้นฐานพร้อม variants
-  - `Card.tsx` - การ์ดสำหรับแสดงข้อมูล
-  - `Input.tsx` - input field พร้อม validation
-  - `Modal.tsx` - modal dialog
-  - `Loading.tsx` - loading spinner
-  - `Layout.tsx` - layout หลักพร้อม Header, Sidebar, Footer
-- ตั้งค่า TypeScript types ใน `/packages/types`:
-  - `User.ts` - user และ role types
-  - `Training.ts` - training plan และ session types
-  - `Workout.ts` - workout log types
+  pnpm add -D @typescript-eslint/parser @typescript-eslint/eslint-plugin
+  pnpm add -D tailwindcss-animate class-variance-authority clsx tailwind-merge
+  
+  # Testing Setup
+  pnpm add -D vitest @testing-library/react @testing-library/jest-dom
+  pnpm add -D @vitejs/plugin-react jsdom
+  ```
+
+#### 2. Configuration Files Setup
+- **Tailwind Config** (`tailwind.config.ts`):
+  ```typescript
+  import type { Config } from 'tailwindcss'
+  
+  const config: Config = {
+    content: [
+      './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+      './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+      './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+      '../../packages/ui/**/*.{js,ts,jsx,tsx}'
+    ],
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          thai: ['Sarabun', 'system-ui', 'sans-serif']
+        },
+        animation: {
+          'fade-in': 'fadeIn 0.5s ease-in-out',
+          'slide-up': 'slideUp 0.3s ease-out'
+        }
+      }
+    },
+    plugins: [
+      require('daisyui'),
+      require('@tailwindcss/typography')
+    ],
+    daisyui: {
+      themes: [
+        {
+          nachoeybusycoach: {
+            // Brand Colors from COLOR.md
+            "primary": "#FF1616",
+            "primary-focus": "#E60000", 
+            "primary-content": "#FFFFFF",
+            "secondary": "#990D0D",
+            "secondary-focus": "#7A0A0A",
+            "secondary-content": "#FFFFFF",
+            "accent": "#FF4444",
+            "accent-focus": "#FF2222",
+            "accent-content": "#FFFFFF",
+            "neutral": "#2A2A2A",
+            "neutral-focus": "#1F1F1F",
+            "neutral-content": "#FFFFFF",
+            "base-100": "#FFFFFF",
+            "base-200": "#F8F8F8",
+            "base-300": "#E8E8E8",
+            "base-content": "#1F1F1F",
+            "info": "#3ABFF8",
+            "success": "#36D399",
+            "warning": "#FBBD23",
+            "error": "#F87272"
+          }
+        }
+      ],
+      base: true,
+      utils: true,
+      logs: false,
+      rtl: false
+    }
+  }
+  export default config
+  ```
+
+- **TypeScript Config** (`tsconfig.json`):
+  ```json
+  {
+    "compilerOptions": {
+      "target": "ES2022",
+      "lib": ["dom", "dom.iterable", "ES6"],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "noEmit": true,
+      "esModuleInterop": true,
+      "module": "esnext",
+      "moduleResolution": "bundler",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": "preserve",
+      "incremental": true,
+      "plugins": [{ "name": "next" }],
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"],
+        "@/ui": ["../../packages/ui"],
+        "@/types": ["../../packages/types"]
+      }
+    },
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "exclude": ["node_modules"]
+  }
+  ```
+
+#### 3. Brand Assets Integration
+- สร้าง Brand Components ใน `/packages/ui/brand/`:
+  - `Logo.tsx` - component สำหรับแสดง logo พร้อม variants
+  - `BrandColors.tsx` - color palette component
+  - `BrandIcons.tsx` - custom icons และ brand elements
+
+#### 4. Shared UI Components ใน `/packages/ui`:
+- **Core Components**:
+  - `Button.tsx` - ปุ่มพร้อม variants และ accessibility
+  - `Card.tsx` - การ์ดพร้อม animations และ hover effects
+  - `Input.tsx` - input field พร้อม validation และ error states
+  - `Modal.tsx` - accessible modal dialog พร้อม focus management
+  - `Loading.tsx` - loading states พร้อม skeleton loaders
+  - `Toast.tsx` - notification system
+
+- **Layout Components**:
+  - `Layout.tsx` - main layout พร้อม responsive design
+  - `Header.tsx` - navigation header พร้อม logo integration
+  - `Sidebar.tsx` - collapsible sidebar navigation
+  - `Footer.tsx` - footer พร้อม brand elements
+
+- **Form Components**:
+  - `FormField.tsx` - wrapper สำหรับ form fields
+  - `Select.tsx` - custom select dropdown
+  - `Checkbox.tsx` - styled checkbox
+  - `RadioGroup.tsx` - radio button group
+
+#### 5. TypeScript Types ใน `/packages/types`:
+- `User.ts` - user, role, และ authentication types
+- `Training.ts` - training plan, session, และ progress types
+- `Workout.ts` - workout log, exercise, และ metrics types
+- `UI.ts` - component props และ theme types
+- `API.ts` - API response และ request types
 
 **File Structure**:
 ```
+/apps/frontend/
+├── src/
+│   ├── app/
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   └── ui/
+│   └── lib/
+│       ├── utils.ts
+│       └── constants.ts
+├── public/
+│   └── images/
+│       ├── block-a-logo.png
+│       └── black-tp-logo.png
+├── tailwind.config.ts
+├── tsconfig.json
+├── next.config.js
+└── package.json
+
 /packages/ui/
+├── brand/
+│   ├── Logo.tsx
+│   ├── BrandColors.tsx
+│   └── BrandIcons.tsx
 ├── components/
-│   ├── Button.tsx
-│   ├── Card.tsx
-│   ├── Input.tsx
-│   ├── Modal.tsx
-│   ├── Loading.tsx
-│   └── Layout.tsx
+│   ├── core/
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   ├── Input.tsx
+│   │   ├── Modal.tsx
+│   │   ├── Loading.tsx
+│   │   └── Toast.tsx
+│   ├── layout/
+│   │   ├── Layout.tsx
+│   │   ├── Header.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── Footer.tsx
+│   └── forms/
+│       ├── FormField.tsx
+│       ├── Select.tsx
+│       ├── Checkbox.tsx
+│       └── RadioGroup.tsx
+├── hooks/
+│   ├── useTheme.ts
+│   └── useBreakpoint.ts
+├── utils/
+│   ├── cn.ts
+│   └── variants.ts
 └── index.ts
 
 /packages/types/
 ├── User.ts
 ├── Training.ts
 ├── Workout.ts
+├── UI.ts
+├── API.ts
 └── index.ts
 ```
 
-**Manual Testing**:
-- รัน `pnpm dev` และเช็คว่า UI components แสดงผลถูกต้อง
-- ทดสอบ responsive design บนมือถือและเดสก์ท็อป
-- ทดสอบ Tailwind CSS และ DaisyUI themes
+#### 6. Development Tools Setup
+- **ESLint Config** (`.eslintrc.json`):
+  ```json
+  {
+    "extends": [
+      "next/core-web-vitals",
+      "@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "prefer-const": "error"
+    }
+  }
+  ```
 
-### Sub-Phase 1.2: Authentication UI (บ่าย)
-**เป้าหมาย**: สร้างหน้า Login และระบบ Authentication UI
+- **Prettier Config** (`.prettierrc`):
+  ```json
+  {
+    "semi": false,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "useTabs": false
+  }
+  ```
+
+- **Vitest Config** (`vitest.config.ts`):
+  ```typescript
+  import { defineConfig } from 'vitest/config'
+  import react from '@vitejs/plugin-react'
+  
+  export default defineConfig({
+    plugins: [react()],
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts']
+    }
+  })
+  ```
+
+#### 7. Logo Integration Examples
+- **Logo Component** (`/packages/ui/brand/Logo.tsx`):
+  ```typescript
+  interface LogoProps {
+    variant?: 'default' | 'transparent'
+    size?: 'sm' | 'md' | 'lg' | 'xl'
+    className?: string
+  }
+  
+  export function Logo({ variant = 'default', size = 'md', className }: LogoProps) {
+    const logoSrc = variant === 'transparent' 
+      ? '/images/black-tp-logo.png' 
+      : '/images/block-a-logo.png'
+    
+    const sizeClasses = {
+      sm: 'h-8 w-auto',
+      md: 'h-12 w-auto', 
+      lg: 'h-16 w-auto',
+      xl: 'h-24 w-auto'
+    }
+    
+    return (
+      <img 
+        src={logoSrc}
+        alt="NachoeyBusyCoach"
+        className={cn(sizeClasses[size], className)}
+      />
+    )
+  }
+  ```
+
+**Manual Testing & Quality Assurance**:
+- **Development Server**: รัน `pnpm dev` และเช็คว่า UI components แสดงผลถูกต้อง
+- **Responsive Design**: ทดสอบบนมือถือ (375px), แท็บเล็ต (768px), และเดสก์ท็อป (1024px+)
+- **Theme Testing**: ทดสอบ DaisyUI theme colors และ dark/light mode
+- **Logo Integration**: ทดสอบการแสดงผล logo ทั้ง 2 variants ในขนาดต่างๆ
+- **Accessibility**: ทดสอบ keyboard navigation และ screen reader compatibility
+- **Performance**: เช็ค Core Web Vitals และ bundle size
+- **TypeScript**: ตรวจสอบ type safety และ IntelliSense
+- **Linting**: รัน `pnpm lint` และ `pnpm type-check`
+- **Testing**: รัน `pnpm test` สำหรับ unit tests
+
+**Success Criteria**:
+✅ Next.js 15 app รันได้โดยไม่มี error  
+✅ DaisyUI theme ใช้งานได้ตาม COLOR.md  
+✅ Logo components แสดงผลถูกต้องทั้ง 2 variants  
+✅ UI components responsive ทุกขนาดหน้าจอ  
+✅ TypeScript strict mode ผ่านทั้งหมด  
+✅ ESLint และ Prettier ทำงานได้  
+✅ Testing setup พร้อมใช้งาน  
+✅ Accessibility standards ผ่าน WCAG 2.1 AA
+
+### Sub-Phase 1.2: Authentication Integration (บ่าย)
+**เป้าหมาย**: เชื่อมต่อกับระบบ Authentication ที่พัฒนาแล้วใน Backend
 
 **งานที่ต้องทำ**:
 - สร้างหน้า Login (`/src/app/login/page.tsx`):
   - OAuth buttons สำหรับ Google, Facebook, Line
-  - Loading states
-  - Error handling
-- ติดตั้งและตั้งค่า NextAuth.js:
-  - สร้าง `/src/app/api/auth/[...nextauth]/route.ts`
-  - ตั้งค่า providers (ใช้ mock ก่อน)
-- สร้าง AuthProvider (`/src/providers/AuthProvider.tsx`)
-- สร้าง useAuth hook (`/src/hooks/useAuth.ts`)
-- สร้าง Protected Route wrapper (`/src/components/ProtectedRoute.tsx`)
+  - Loading states และ Error handling
+  - เชื่อมต่อกับ `/api/auth/[...nextauth]` ที่มีอยู่แล้ว
+- ✅ **Backend Ready**: NextAuth.js setup ใน `/api/auth/[...nextauth]/route.ts`
+- สร้าง Frontend Auth Components:
+  - `AuthProvider.tsx` - NextAuth SessionProvider wrapper
+  - `useAuth.ts` - Custom hook ใช้ useSession
+  - `ProtectedRoute.tsx` - Route protection component
+  - `LoginButton.tsx` - OAuth login buttons
 - สร้างหน้า Dashboard พื้นฐาน:
   - `/src/app/dashboard/runner/page.tsx`
   - `/src/app/dashboard/coach/page.tsx`
+- เชื่อมต่อกับ User Profile API:
+  - `/api/users/profile` - Get/Update user profile
+  - `/api/users/role` - Role management
 
-**Mock Data**:
+**Backend Integration**:
 ```typescript
-// /src/lib/mockData.ts
-export const mockUser = {
-  id: '1',
-  name: 'นักวิ่งทดสอบ',
-  email: 'runner@test.com',
-  role: 'runner', // หรือ 'coach'
-  avatar: '/images/avatar-placeholder.png'
+// Authentication Service
+export const authService = {
+  // Get current user profile
+  getCurrentUser: () => fetch('/api/users/profile'),
+  
+  // Update user profile
+  updateProfile: (data: UpdateProfileData) => 
+    fetch('/api/users/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+  
+  // Update user role
+  updateRole: (data: UpdateRoleData) => 
+    fetch('/api/users/role', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
 }
 
-export const mockCoach = {
-  id: '2',
-  name: 'โค้ชทดสอบ',
-  email: 'coach@test.com',
-  role: 'coach',
-  avatar: '/images/coach-placeholder.png'
+// NextAuth.js Integration
+import { useSession, signIn, signOut } from 'next-auth/react'
+
+export function useAuth() {
+  const { data: session, status } = useSession()
+  
+  return {
+    user: session?.user,
+    isLoading: status === 'loading',
+    isAuthenticated: !!session,
+    signIn,
+    signOut
+  }
 }
+
+// Data fetching with SWR
+const { data: userProfile } = useSWR('/api/users/profile', fetcher)
 ```
 
 **Manual Testing**:
@@ -135,39 +456,53 @@ export const mockCoach = {
   - Monthly overview
   - Performance trends
 
-**Mock Data**:
+**Backend Integration**:
 ```typescript
-export const mockTrainingPlan = {
-  id: '1',
-  runnerId: '1',
-  week: '2024-W20',
-  weekStart: '2024-05-13',
-  sessions: [
-    {
-      id: '1',
-      day: 'Monday',
-      date: '2024-05-13',
-      type: 'Easy Run',
-      distance: '5km',
-      duration: '30min',
-      pace: '6:00/km',
-      notes: 'วิ่งเบาๆ ผ่อนคลาย อย่าเร่งเครื่อง',
-      status: 'pending'
-    },
-    {
-      id: '2',
-      day: 'Tuesday',
-      date: '2024-05-14',
-      type: 'Interval Training',
-      distance: '8km',
-      duration: '45min',
-      pace: '4:30/km',
-      notes: '400m x 8 reps, พัก 90 วินาที',
-      status: 'pending'
-    }
-    // ... เพิ่มข้อมูลสำหรับทั้งสัปดาห์
-  ]
+// Training Plan API Service
+export const trainingPlanService = {
+  // Get training plans for user
+  getTrainingPlans: (userId: string) => 
+    fetch(`/api/training-plans?userId=${userId}`),
+  
+  // Get specific training plan
+  getTrainingPlan: (id: string) => 
+    fetch(`/api/training-plans/${id}`),
+  
+  // Create new training plan
+  createTrainingPlan: (data: CreateTrainingPlanData) => 
+    fetch('/api/training-plans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+  
+  // Update training plan
+  updateTrainingPlan: (id: string, data: UpdateTrainingPlanData) => 
+    fetch(`/api/training-plans/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
 }
+
+// Training Session API Service
+export const sessionService = {
+  // Get sessions for training plan
+  getSessions: (trainingPlanId: string) => 
+    fetch(`/api/sessions?trainingPlanId=${trainingPlanId}`),
+  
+  // Create bulk sessions
+  createBulkSessions: (data: CreateBulkSessionsData) => 
+    fetch('/api/sessions/bulk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+}
+
+// Data fetching with SWR
+const { data: trainingPlans } = useSWR(`/api/training-plans?userId=${userId}`, fetcher)
+const { data: sessions } = useSWR(`/api/sessions?trainingPlanId=${planId}`, fetcher)
 ```
 
 **Manual Testing**:
@@ -240,23 +575,48 @@ interface WorkoutLogForm {
 }
 ```
 
-**Mock Data**:
+**Backend Integration**:
 ```typescript
-export const mockWorkoutLog = {
-  id: '1',
-  sessionId: '1',
-  status: 'completed',
-  externalLink: 'https://strava.com/activities/123456789',
-  actualDistance: 5.2,
-  actualDuration: '28:45',
-  actualPace: '5:32/km',
-  notes: 'วิ่งได้ดีมาก รู้สึกแข็งแรง อากาศเย็นสบาย',
-  feeling: 'good',
-  injuries: [],
-  weather: 'cloudy',
-  temperature: 28,
-  createdAt: '2024-05-13T18:30:00Z'
+// Workout Log API Service
+export const workoutLogService = {
+  // Create workout log
+  createWorkoutLog: (data: CreateWorkoutLogData) => 
+    fetch('/api/workout-logs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+  
+  // Get workout logs for user
+  getWorkoutLogs: (userId: string, params?: QueryParams) => 
+    fetch(`/api/workout-logs?userId=${userId}&${new URLSearchParams(params)}`),
+  
+  // Get workout log history
+  getWorkoutHistory: (userId: string) => 
+    fetch(`/api/workout-logs/history?userId=${userId}`),
+  
+  // Update workout log
+  updateWorkoutLog: (id: string, data: UpdateWorkoutLogData) => 
+    fetch(`/api/workout-logs/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+  
+  // Delete workout log
+  deleteWorkoutLog: (id: string) => 
+    fetch(`/api/workout-logs/${id}`, { method: 'DELETE' })
 }
+
+// Data fetching with SWR
+const { data: workoutLogs } = useSWR(`/api/workout-logs?userId=${userId}`, fetcher)
+const { data: workoutHistory } = useSWR(`/api/workout-logs/history?userId=${userId}`, fetcher)
+
+// Form submission with mutation
+const { trigger: createWorkoutLog } = useSWRMutation('/api/workout-logs', 
+  (url, { arg }: { arg: CreateWorkoutLogData }) => 
+    workoutLogService.createWorkoutLog(arg)
+)
 ```
 
 **Manual Testing**:
@@ -281,6 +641,59 @@ export const mockWorkoutLog = {
   - Weekly consistency chart
   - Performance trends
 
+**Backend Integration for Analytics**:
+```typescript
+// Analytics API Service
+export const analyticsService = {
+  // Get runner analytics
+  getRunnerAnalytics: (runnerId: string) => 
+    fetch(`/api/analytics/runner/${runnerId}`),
+  
+  // Get workout history with pagination
+  getWorkoutHistory: (params: HistoryParams) => {
+    const searchParams = new URLSearchParams(params)
+    return fetch(`/api/workout-logs/history?${searchParams}`)
+  },
+  
+  // Get performance trends
+  getPerformanceTrends: (runnerId: string, period: string) => 
+    fetch(`/api/analytics/runner/${runnerId}?period=${period}`)
+}
+
+// Analytics Types (matching backend schema)
+interface RunnerAnalytics {
+  totalSessions: number
+  completedLogs: number
+  totalDistance: number
+  averageFeeling: number
+  weeklyStats: {
+    _createdAt: string
+    status: string
+    actualDistance: number
+    feeling: string
+  }[]
+}
+
+interface HistoryParams {
+  runnerId?: string
+  page?: string
+  limit?: string
+  startDate?: string
+  endDate?: string
+  status?: string
+}
+
+// Data fetching with SWR
+const { data: analytics } = useSWR(
+  `/api/analytics/runner/${runnerId}`, 
+  fetcher
+)
+const { data: history } = useSWR(
+  `/api/workout-logs/history?runnerId=${runnerId}`, 
+  fetcher
+)
+```
+
 **Manual Testing**:
 - ทดสอบการแสดงประวัติ
 - ทดสอบ filter และ search
@@ -304,32 +717,74 @@ export const mockWorkoutLog = {
   - Weekly activity chart
   - Completion rates
 
-**Mock Data**:
+**Backend Integration for Coach Analytics**:
 ```typescript
-export const mockRunners = [
-  {
-    id: '1',
-    name: 'นักวิ่ง A',
-    email: 'runner-a@test.com',
-    weeklyProgress: 85,
-    pendingReviews: 2,
-    lastActivity: '2024-05-15',
-    totalSessions: 24,
-    completedSessions: 20,
-    avatar: '/images/runner-a.png'
-  },
-  {
-    id: '2',
-    name: 'นักวิ่ง B',
-    email: 'runner-b@test.com',
-    weeklyProgress: 60,
-    pendingReviews: 1,
-    lastActivity: '2024-05-14',
-    totalSessions: 18,
-    completedSessions: 11,
-    avatar: '/images/runner-b.png'
-  }
-]
+// Coach Analytics API Service
+export const coachAnalyticsService = {
+  // Get coach overview analytics
+  getCoachAnalytics: (coachId: string) => 
+    fetch(`/api/analytics/coach/${coachId}`),
+  
+  // Get all runners under coach
+  getCoachRunners: () => 
+    fetch('/api/users/profile?role=runner'),
+  
+  // Get aggregated runner performance
+  getRunnerPerformance: (runnerId: string) => 
+    fetch(`/api/analytics/runner/${runnerId}`)
+}
+
+// Coach Analytics Types
+interface CoachAnalytics {
+  totalRunners: number
+  activeRunners: number
+  completionRate: number
+  weeklyActivity: {
+    week: string
+    completedSessions: number
+    totalSessions: number
+  }[]
+  topPerformers: {
+    runnerId: string
+    name: string
+    completionRate: number
+  }[]
+}
+
+// Data fetching for coach dashboard
+const { data: coachAnalytics } = useSWR(
+  `/api/analytics/coach/${coachId}`, 
+  fetcher
+)
+const { data: runners } = useSWR(
+  '/api/users/profile?role=runner', 
+  fetcher
+)
+```
+
+**Backend Integration**:
+```typescript
+// API Service for Runner Management
+export const runnerService = {
+  // Get all runners for coach
+  getRunners: () => fetch('/api/users/profile?role=runner'),
+  
+  // Get runner analytics
+  getRunnerAnalytics: (runnerId: string) => 
+    fetch(`/api/analytics/runner/${runnerId}`),
+  
+  // Get runner's training sessions
+  getRunnerSessions: (runnerId: string) => 
+    fetch(`/api/sessions?userId=${runnerId}`),
+  
+  // Get pending feedback for runner
+  getPendingFeedback: (runnerId: string) => 
+    fetch(`/api/feedback?userId=${runnerId}&status=pending`)
+}
+
+// Data fetching with SWR
+const { data: runners, error } = useSWR('/api/users/profile?role=runner', fetcher)
+const { data: analytics } = useSWR(`/api/analytics/runner/${runnerId}`, fetcher)
 ```
 
 **Manual Testing**:
@@ -437,8 +892,32 @@ export const sessionTemplates = [
 - สร้าง emoji reactions
 - เพิ่ม file attachments (images, videos)
 
-**Feedback Types**:
+**Backend Integration for Feedback**:
 ```typescript
+// Feedback API Service
+export const feedbackService = {
+  // Create new feedback
+  createFeedback: (data: CreateFeedbackData) => 
+    fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+  
+  // Get feedback for workout log
+  getFeedback: (workoutLogId: string) => 
+    fetch(`/api/feedback?workoutLogId=${workoutLogId}`),
+  
+  // Update feedback
+  updateFeedback: (id: string, data: UpdateFeedbackData) => 
+    fetch(`/api/feedback/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+}
+
+// Feedback Types (matching backend schema)
 interface Feedback {
   id: string
   workoutLogId: string
@@ -473,8 +952,27 @@ interface Feedback {
 - เพิ่ม notification preferences
 - สร้าง notification sounds (optional)
 
-**Notification Types**:
+**Backend Integration for Notifications**:
 ```typescript
+// Notification API Service
+export const notificationService = {
+  // Get user notifications
+  getNotifications: () => fetch('/api/notifications'),
+  
+  // Mark notification as read
+  markAsRead: (id: string) => 
+    fetch(`/api/notifications/${id}/read`, { method: 'POST' }),
+  
+  // Create new notification
+  createNotification: (data: CreateNotificationData) => 
+    fetch('/api/notifications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+}
+
+// Notification Types (matching backend schema)
 type NotificationType = 
   | 'new_feedback'
   | 'plan_assigned'

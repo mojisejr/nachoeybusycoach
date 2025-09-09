@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     // Import the bulk create schema
-    const { bulkCreateTrainingSessionSchema } = await import('types');
+    const { bulkCreateTrainingSessionSchema } = await import('@nachoeybusycoach/types');
     
     // Validate request body
     const validatedData = bulkCreateTrainingSessionSchema.safeParse(body);
