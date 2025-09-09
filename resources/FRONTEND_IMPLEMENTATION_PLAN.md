@@ -394,7 +394,7 @@
 ✅ Testing setup พร้อมใช้งาน  
 ✅ Accessibility standards ผ่าน WCAG 2.1 AA
 
-### Sub-Phase 1.2: Authentication Integration (บ่าย) Working
+### Sub-Phase 1.2: Authentication Integration (บ่าย) Done
 
 **เป้าหมาย**: เชื่อมต่อกับระบบ Authentication ที่พัฒนาแล้วใน Backend
 

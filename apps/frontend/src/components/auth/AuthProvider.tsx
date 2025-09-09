@@ -10,7 +10,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children, session }: AuthProviderProps) {
   return (
-    <SessionProvider session={session} basePath="/api/auth">
+    <SessionProvider session={session}>
       {children}
     </SessionProvider>
   );

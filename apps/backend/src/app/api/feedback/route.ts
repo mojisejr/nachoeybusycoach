@@ -1,43 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { client } from '@/sanity/lib/client';
+import { authOptions } from '@/lib/auth';
 import { z } from 'zod';
-
-// Import auth configuration
-import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import FacebookProvider from 'next-auth/providers/facebook';
-
-const authOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-    }),
-  ],
-  callbacks: {
-    session: async ({ session, token }: any) => {
-      if (session?.user) {
-        (session.user as any).role = token.role || "runner";
-        (session.user as any).id = token.sub;
-      }
-      return session;
-    },
-    jwt: async ({ user, token }: any) => {
-      if (user) {
-        token.role = "runner";
-      }
-      return token;
-    },
-  },
-  session: {
-    strategy: "jwt" as const,
-  },
-};
 
 // Validation schemas
 const feedbackSchema = z.object({
