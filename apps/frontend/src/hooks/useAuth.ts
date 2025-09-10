@@ -29,7 +29,20 @@ interface UseAuthReturn {
 }
 
 export function useAuth(): UseAuthReturn {
-  const { data: session, status } = useSession();
+  let session = null;
+  let status = 'loading';
+  
+  try {
+    const sessionData = useSession();
+    session = sessionData.data;
+    status = sessionData.status;
+  } catch {
+    // Fallback if useSession is called outside SessionProvider
+    console.warn('useSession called outside SessionProvider, using fallback values');
+    session = null;
+    status = 'unauthenticated';
+  }
+  
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);

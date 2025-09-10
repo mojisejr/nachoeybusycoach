@@ -1,7 +1,7 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -9,19 +9,14 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children, session }: AuthProviderProps) {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Prevent hydration mismatch by only rendering SessionProvider on client
-  if (!isClient) {
-    return <>{children}</>;
-  }
-
   return (
-    <SessionProvider session={session}>
+    <SessionProvider 
+      session={session}
+      // Disable automatic refetching on window focus to prevent hydration issues
+      refetchOnWindowFocus={false}
+      // Use the session from props to ensure server/client consistency
+      refetchWhenOffline={false}
+    >
       {children}
     </SessionProvider>
   );
