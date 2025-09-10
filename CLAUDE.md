@@ -845,6 +845,28 @@ npx prisma generate && npm run build
 
 ## 📚 Key Implementation Learnings
 
+### Critical Authentication Architecture Resolution (2025-09-10)
+
+**Issue**: Webpack module loading error during login - "Cannot read properties of undefined (reading 'call')"
+
+**Root Cause**: Authentication proxy configuration requires BOTH servers running simultaneously:
+- Frontend (port 3000): Receives auth requests and proxies to backend
+- Backend (port 3001): Handles actual NextAuth.js authentication
+
+**Resolution**: 
+```bash
+# Terminal 1: Start backend server
+cd apps/backend && npm run dev
+
+# Terminal 2: Start frontend server  
+cd apps/frontend && npm run dev
+
+# Or use monorepo command:
+pnpm dev  # Starts both servers
+```
+
+**Key Learning**: Network connectivity issues can manifest as webpack/module loading errors. Always verify dependent services are running before debugging application code.
+
 ### High-Impact Development Patterns
 
 - **NextAuth.js**: 15-minute setup with standardized OAuth (Google, Facebook, Line)
