@@ -5,6 +5,10 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { FaRunning, FaCalendarAlt, FaChartLine, FaUser, FaSignOutAlt, FaSpinner } from 'react-icons/fa';
 import { Card, Title, Text, Metric, Badge, ProgressBar } from '@tremor/react';
 
+// Prevent static generation for this page
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+
 function RunnerDashboardContent() {
   const { user, userProfile, userRole, profileLoading, roleLoading, logout } = useAuth();
 

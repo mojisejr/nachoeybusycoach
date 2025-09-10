@@ -5,6 +5,10 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import CoachDashboard from '@/components/training/CoachDashboard';
 import { TrainingSession } from '@/types/training';
 
+// Prevent static generation for this page
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+
 interface Runner {
   _id: string;
   name: string;
