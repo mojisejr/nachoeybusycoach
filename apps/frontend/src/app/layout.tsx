@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "นาเชยไม่เคยมีโค้ชว่าง | NachoeyBusyCoach",
-  description: "แพลตฟอร์มศูนย์กลางการสื่อสารและบริหารจัดการระหว่างนักวิ่งและโค้ชส่วนตัว",
+  description:
+    "แพลตฟอร์มศูนย์กลางการสื่อสารและบริหารจัดการระหว่างนักวิ่งและโค้ชส่วนตัว",
 };
 
 export default function RootLayout({
@@ -30,9 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ErrorBoundary>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </ErrorBoundary>
       </body>
     </html>

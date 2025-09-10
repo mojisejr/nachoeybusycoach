@@ -49,16 +49,19 @@
 #### นักวิ่ง (Runner Journey)
 
 ##### 1. การเริ่มต้นใช้งาน
+
 - เข้าสู่ระบบด้วย Google, Facebook หรือ Line
 - ตั้งค่าโปรไฟล์เบื้องต้น
 - รอโค้ชเพิ่มเข้าระบบและกำหนดแผนการฝึกซ้อม
 
 ##### 2. การดูและทำตามแผนการฝึกซ้อม
+
 - เข้าไปดูตารางการฝึกซ้อมประจำสัปดาห์
 - คลิกดู Session ในแต่ละวันเพื่อดูรายละเอียด
 - ทำการฝึกซ้อมตามแผนที่โค้ชกำหนด
 
 ##### 3. การบันทึกผลการฝึกซ้อม
+
 - เลือกสถานะการซ้อม: Completed (Done), DNF, หรือ Undone
 - แนบลิงก์จาก Garmin หรือ Strava (ถ้ามี)
 - เขียนบันทึกส่วนตัวเกี่ยวกับการซ้อม
@@ -66,6 +69,7 @@
 - ส่งข้อมูลให้โค้ชตรวจสอบ
 
 ##### 4. การติดตามและรับ Feedback
+
 - ดูสถานะว่าโค้ชได้ตรวจสอบการซ้อมแล้วหรือยัง
 - อ่านคำแนะนำและ Feedback จากโค้ช
 - ตอบกลับหรือถามคำถามเพิ่มเติมผ่านระบบ comment
@@ -73,17 +77,20 @@
 #### โค้ช (Coach Journey)
 
 ##### 1. การเริ่มต้นใช้งาน
+
 - เข้าสู่ระบบด้วย Google, Facebook หรือ Line
 - ตั้งค่าโปรไฟล์โค้ช
 - เพิ่มนักวิ่งเข้าสู่ระบบ
 
 ##### 2. การสร้างแผนการฝึกซ้อม
+
 - เลือกนักวิ่งที่ต้องการสร้างแผน
 - กำหนดตารางการฝึกซ้อมประจำสัปดาห์
 - ระบุรายละเอียดของแต่ละ Session (ระยะทาง, เวลา, ความเข้มข้น, หมายเหตุ)
 - บันทึกและส่งแผนให้นักวิ่ง
 
 ##### 3. การติดตามและให้คำแนะนำ
+
 - ดูสถานะการซ้อมของนักวิ่งแต่ละคน
 - เปิดดูลิงก์จาก Strava หรือ Garmin ที่นักวิ่งส่งมา
 - อ่านบันทึกและข้อมูลความรู้สึกของนักวิ่ง
@@ -91,6 +98,7 @@
 - เปลี่ยนสถานะเป็น "ตรวจสอบแล้ว"
 
 ##### 4. การปรับแผนและจัดการ
+
 - ปรับเปลี่ยนแผนการซ้อมเมื่อจำเป็น
 - ดูข้อมูลสรุปของนักวิ่งหลายคน
 - วิเคราะห์ความก้าวหน้าและวางแผนระยะยาว
@@ -102,29 +110,35 @@
 ### Tech Stack
 
 **Frontend Framework**:
+
 - Next.js 14 with App Router - สำหรับการสร้างแอปพลิเคชันที่มีประสิทธิภาพสูงและรองรับ Server-Side Rendering (SSR)
 - TypeScript - สำหรับความปลอดภัยของประเภทข้อมูล
 - React Hook Form - สำหรับการจัดการฟอร์ม
 - Zustand - สำหรับการจัดการ state
 
 **Styling & UI**:
+
 - Tailwind CSS & DaisyUI - เพื่อความรวดเร็วในการออกแบบ UI/UX โดยไม่ต้องเขียน CSS เอง
 - Tremor - เพื่อสร้าง Dashboard และกราฟสำหรับโค้ชและนักวิ่งได้อย่างสวยงาม
 
 **Backend & Data Management**:
+
 - Sanity.io (Headless CMS) - สำหรับการจัดการข้อมูลทั้งหมดและการสร้าง UI สำหรับโค้ชโดยอัตโนมัติ
 - Next.js API Routes - สำหรับ backend logic และ API endpoints
 
 **Authentication**:
+
 - NextAuth.js - รองรับการเข้าสู่ระบบด้วย Google, Facebook, และ Line
 
 **Development & Deployment**:
+
 - pnpm - เพื่อจัดการ Dependency ใน Monorepo ให้มีประสิทธิภาพและประหยัดพื้นที่
 - ESLint & Prettier - สำหรับคุณภาพของโค้ด
 - Vercel - สำหรับการ Deploy ทั้ง Frontend และ Backend ได้อย่างง่ายดาย
 - GitHub Actions - สำหรับ CI/CD
 
 **Package Management**:
+
 - pnpm workspaces - สำหรับจัดการ Monorepo structure
 
 ### Monorepo Structure
@@ -149,10 +163,12 @@ nachoeybusycoach/
 ### การแบ่งหน้าที่ในทีม
 
 **นักพัฒนาคนที่ 1 (Frontend Developer)**:
+
 - รับผิดชอบการพัฒนาส่วน `/apps/frontend` และส่วนประกอบ UI ใน `/packages/ui`
 - สร้างหน้า Dashboard, ตารางซ้อม, และฟอร์มต่างๆ สำหรับนักวิ่งและโค้ช
 
 **นักพัฒนาคนที่ 2 (Backend Developer)**:
+
 - รับผิดชอบการพัฒนาส่วน `/apps/backend` และการเชื่อมต่อกับ Sanity Headless CMS
 - จัดการข้อมูล, สร้าง API endpoints สำหรับการดึงและบันทึกข้อมูลการซ้อม
 - เขียน Logic ที่เกี่ยวข้องกับ Backend ทั้งหมด
@@ -162,10 +178,12 @@ nachoeybusycoach/
 ### สำหรับนักวิ่ง (Runner Requirements)
 
 1. **การดูตารางการฝึกซ้อม**
+
    - ดูตารางการฝึกซ้อมที่โค้ชมอบหมายให้ในแต่ละสัปดาห์
    - ดูรายละเอียดของ Session ในแต่ละวัน (ระยะทาง, เวลา, ความเข้มข้น, หมายเหตุ)
 
 2. **การบันทึกการซ้อม**
+
    - เลือกสถานะการซ้อม: Completed (Done), DNF, หรือ Undone
    - แนบลิงก์จาก Garmin หรือ Strava ได้อย่างง่ายดาย
    - เขียนบันทึกส่วนตัวของการซ้อม
@@ -179,11 +197,13 @@ nachoeybusycoach/
 ### สำหรับโค้ช (Coach Requirements)
 
 1. **การจัดการแผนการฝึกซ้อม**
+
    - สร้างและกำหนดตารางการฝึกซ้อมสำหรับนักวิ่งแต่ละคนในแต่ละสัปดาห์
    - ระบุรายละเอียดของแต่ละ Session (ระยะทาง, เวลา, ความเข้มข้น, หมายเหตุ)
    - ปรับเปลี่ยนแผนการซ้อมของนักวิ่งได้ระหว่างสัปดาห์เมื่อจำเป็น
 
 2. **การตรวจสอบและให้คำแนะนำ**
+
    - ดูสถานะการซ้อมของนักวิ่งแต่ละคน
    - เปิดดูลิงก์จาก Strava หรือ Garmin ที่นักวิ่งส่งมาได้อย่างรวดเร็ว
    - แสดงความคิดเห็นและให้คำแนะนำในแต่ละ Session ของนักวิ่ง
@@ -196,21 +216,25 @@ nachoeybusycoach/
 ## Non-Functional Requirements
 
 ### Performance Requirements
+
 - หน้าเว็บต้องโหลดภายใน 3 วินาที
 - รองรับผู้ใช้พร้อมกันได้อย่างน้อย 100 คน
 - ระบบต้องมี uptime อย่างน้อย 99%
 
 ### Security Requirements
+
 - การเข้าสู่ระบบผ่าน OAuth providers (Google, Facebook, Line)
 - ข้อมูลส่วนตัวของผู้ใช้ต้องได้รับการปกป้อง
 - การเข้าถึงข้อมูลต้องผ่านระบบ authorization
 
 ### Usability Requirements
+
 - Interface ต้องใช้งานง่ายและเข้าใจง่าย
 - รองรับการใช้งานบนมือถือและเดสก์ท็อป
 - ระบบต้องมี feedback ที่ชัดเจนเมื่อผู้ใช้ทำการใดๆ
 
 ### Compatibility Requirements
+
 - รองรับ browser สมัยใหม่ (Chrome, Firefox, Safari, Edge)
 - รองรับการใช้งานบนมือถือ (iOS, Android)
 - ใช้งานได้กับ screen reader สำหรับผู้พิการทางสายตา
@@ -218,10 +242,12 @@ nachoeybusycoach/
 #### ระบบหลัก (Core Systems)
 
 1. **ระบบผู้ใช้งาน (Authentication)**
+
    - เข้าสู่ระบบด้วยบัญชี Google, Facebook, และ Line
    - แยกสิทธิ์การเข้าถึงระหว่างโค้ชและนักวิ่ง
 
 2. **ระบบการสื่อสาร (Communication)**
+
    - ระบบ comment ภายในแต่ละ session เพื่อการสื่อสารโดยตรงระหว่างโค้ชและนักวิ่ง
    - ระบบการแจ้งเตือนเมื่อโค้ชให้ Feedback
 
@@ -306,51 +332,26 @@ Phase 5: Cleanup & Review (1-2 minutes)
 └─ Status communication
 ```
 
-#### Reference Pattern Implementation
+#### Core Development Patterns
 
-**When Following Proven Patterns** (56% efficiency improvement proven):
+**Pattern Replication Strategy** (56% efficiency improvement):
 
-1. **Identify Reference Session**: Look for similar work in `/docs/retrospective/`
-2. **Extract Implementation Steps**: Follow the proven methodology exactly
-3. **Adapt Context-Specific Elements**: Modify only what's necessary for the new context
-4. **Track Time Improvements**: Measure and document efficiency gains
+- Use `/docs/retrospective/` for reference implementations
+- Follow proven methodologies, adapt only necessary elements
+- Track time improvements and document variations
 
-#### Branch Management Excellence
-
-**Critical Workflow Adherence** (learned from workflow violations):
+**Branch Management**:
 
 ```bash
-# ALWAYS create feature branches - NEVER work on main
 git checkout -b feature/[issue-number]-[description]
-
-# MANDATORY workflow sequence:
-1. Analysis & Planning
-2. Branch Creation
-3. Implementation with TodoWrite tracking
-4. Build Validation
-5. Commit & Push
-6. PR Creation
-7. Issue Updates
+# Sequence: Analysis → Branch → Implementation → Validation → Commit → PR → Updates
 ```
 
-#### TodoWrite Integration Patterns
+**TodoWrite Integration** (High-impact for 3+ component changes):
 
-**High-Impact Usage Scenarios**:
-
-- **Complex refactoring**: 3+ component changes
-- **Multi-phase implementations**: API + Frontend work
-- **Large system changes**: Database + Application updates
-- **Pattern replication**: Following proven approaches
-
-**TodoWrite Best Practices**:
-
-```markdown
-1. Create 5-8 specific, actionable todos
-2. Mark exactly ONE todo as 'in_progress' at a time
-3. Complete todos immediately after finishing each step
-4. Update progress before moving to next phase
-5. Use for stakeholder visibility and accountability
-```
+- 5-8 specific todos, ONE in_progress at a time
+- Complete immediately after each step
+- Essential for complex refactoring and full-stack implementations
 
 ### 🌿 Automated Workflow Implementation
 
@@ -396,27 +397,12 @@ The following commands now include **FULL WORKFLOW AUTOMATION**:
 9. User Notification → Provide PR URL for review and approval
 ```
 
-**TodoWrite Performance Benefits:**
+**TodoWrite Benefits**: 56% efficiency gain, prevents skipping steps, creates audit trail
 
-- **Visibility**: Real-time progress tracking for stakeholders
-- **Accountability**: Prevents skipping critical implementation steps
-- **Focus**: Reduces context switching during complex implementations
-- **Efficiency**: Proven 15-minute implementations vs 34-minute baseline
-- **Documentation**: Creates audit trail of implementation progress
+**Usage Guidelines**:
 
-**High-Impact TodoWrite Usage Patterns:**
-
-```markdown
-✅ Complex multi-component refactoring (3+ files)
-✅ Full-stack implementations (API + Frontend)
-✅ Multi-phase system changes (Database + Application)
-✅ Pattern replication following proven approaches
-✅ Large refactoring with dependency management
-
-❌ Single file edits or trivial changes
-❌ Simple documentation updates
-❌ Quick bug fixes without multiple steps
-```
+- ✅ Multi-component refactoring, full-stack implementations, large system changes
+- ❌ Single file edits, simple documentation, quick fixes
 
 ##### Branch Naming Convention
 
@@ -656,12 +642,14 @@ npm run prompts:docs
 ### Phase 1: โครงสร้างพื้นฐาน (Foundation) - สัปดาห์ที่ 1-2
 
 #### เป้าหมาย
+
 - ตั้งค่าโครงสร้างโปรเจกต์และ monorepo
 - ระบบ authentication พื้นฐาน
 - Database schema และ Sanity.io setup
 - UI components หลัก
 
 #### งานที่ต้องทำ
+
 - [ ] ตั้งค่า Next.js 14 project structure
 - [ ] ติดตั้งและกำหนดค่า Sanity.io
 - [ ] สร้าง schemas สำหรับ User, TrainingPlan, TrainingSession, WorkoutLog, Feedback
@@ -672,12 +660,14 @@ npm run prompts:docs
 ### Phase 2: ระบบหลัก (Core Features) - สัปดาห์ที่ 3-6
 
 #### เป้าหมาย
+
 - ระบบจัดการผู้ใช้และสิทธิ์
 - การสร้างและจัดการแผนการฝึกซ้อม
 - ระบบบันทึกการซ้อมพื้นฐาน
 - ความสัมพันธ์ระหว่างโค้ชและนักวิ่ง
 
 #### งานที่ต้องทำ
+
 - [ ] สร้างหน้า Dashboard สำหรับโค้ชและนักวิ่ง
 - [ ] ระบบสร้างและแก้ไข Training Plan
 - [ ] หน้าแสดงตารางการฝึกซ้อมประจำสัปดาห์
@@ -688,11 +678,13 @@ npm run prompts:docs
 ### Phase 3: ระบบการสื่อสาร (Communication) - สัปดาห์ที่ 7-8
 
 #### เป้าหมาย
+
 - ระบบ comment และ feedback
 - ระบบการแจ้งเตือน
 - การติดตามสถานะการตรวจสอบ
 
 #### งานที่ต้องทำ
+
 - [ ] ระบบ comment ในแต่ละ training session
 - [ ] ระบบ feedback จากโค้ชถึงนักวิ่ง
 - [ ] ระบบการแจ้งเตือนเมื่อมี feedback ใหม่
@@ -702,12 +694,14 @@ npm run prompts:docs
 ### Phase 4: Analytics และการปรับปรุง (Analytics & Polish) - สัปดาห์ที่ 9-10
 
 #### เป้าหมาย
+
 - หน้า Dashboard ที่สมบูรณ์
 - ระบบวิเคราะห์ความก้าวหน้า
 - การปรับปรุง UI/UX
 - การทดสอบและแก้ไขบัค
 
 #### งานที่ต้องทำ
+
 - [ ] กราฟแสดงความก้าวหน้าด้วย Tremor
 - [ ] สรุปข้อมูลการฝึกซ้อมรายสัปดาห์/เดือน
 - [ ] ระบบค้นหาและกรองข้อมูล
@@ -718,11 +712,13 @@ npm run prompts:docs
 ### Phase 5: Deployment และ Launch - สัปดาห์ที่ 11-12
 
 #### เป้าหมาย
+
 - Deploy production บน Vercel
 - การทดสอบกับผู้ใช้จริง
 - เตรียมความพร้อมสำหรับการเปิดตัว
 
 #### งานที่ต้องทำ
+
 - [ ] ตั้งค่า production environment บน Vercel
 - [ ] ตั้งค่า Sanity.io production dataset
 - [ ] การทดสอบ User Acceptance Testing
@@ -772,92 +768,19 @@ Phase 4: Documentation & Cleanup (10-15% of time)
 4. Pattern Maturation → Achieve consistent sub-20-minute implementations
 ```
 
-### Retrospective Workflow
+### Session Management
 
-#### Session Tracking
+**Retrospective Workflow**:
 
-**Mandatory Retrospective Creation** after each development session:
+- Create with `=rrr > [session-summary]`
+- Structure: Duration, scope, challenges, solutions, lessons learned
+- Track efficiency factors, pattern usage, tool effectiveness
 
-```bash
-# Create retrospective with session summary
-=rrr > [session-summary]
-```
+**Pattern Replication** (56% faster implementations):
 
-**Retrospective File Structure**:
-
-```
-docs/retrospective/YYYY-MM-DD-[session-type].md
-├─ Session Summary
-├─ AI Diary (automated insights)
-├─ Honest Feedback
-├─ Performance Metrics
-└─ Pattern Recognition
-```
-
-#### AI Diary Integration
-
-**Automated Session Analysis**:
-
-- **Implementation Efficiency**: Time tracking and bottleneck identification
-- **Pattern Recognition**: Successful approaches and reusable patterns
-- **Workflow Adherence**: Compliance with established guidelines
-- **Quality Metrics**: Code quality, testing coverage, documentation
-
-#### Mandatory Retrospective Sections
-
-```markdown
-## Session Summary
-- **Duration**: [actual time]
-- **Scope**: [what was accomplished]
-- **Challenges**: [obstacles encountered]
-- **Solutions**: [how challenges were resolved]
-
-## AI Diary
-- **Efficiency Factors**: [what made this session fast/slow]
-- **Pattern Usage**: [which patterns were applied]
-- **Tool Effectiveness**: [TodoWrite, automation, etc.]
-- **Workflow Compliance**: [adherence to guidelines]
-
-## Honest Feedback
-- **What Worked Well**: [successful approaches]
-- **What Could Improve**: [areas for optimization]
-- **Lessons Learned**: [key insights]
-- **Next Session Prep**: [preparation for future work]
-```
-
-### Best Practices from Retrospectives
-
-#### TodoWrite Integration
-
-**Proven High-Impact Scenarios** (from retrospective analysis):
-
-```markdown
-✅ Multi-component refactoring (3+ files)
-✅ Full-stack feature implementation
-✅ Database schema changes with application updates
-✅ Complex integration work
-✅ Pattern replication from previous sessions
-
-❌ Single file edits
-❌ Documentation-only updates
-❌ Simple bug fixes
-```
-
-#### Pattern Replication Strategy
-
-**Efficiency Gains from Pattern Following**:
-
-- **56% faster implementations** when following proven patterns
-- **Consistent sub-20-minute sessions** for similar work
-- **Reduced error rates** through established approaches
-- **Improved code quality** via tested methodologies
-
-**Pattern Identification Process**:
-
-1. **Search retrospectives** for similar implementation types
-2. **Extract successful approaches** from high-performing sessions
-3. **Adapt patterns** to current context while maintaining core methodology
-4. **Document variations** for future pattern evolution
+1. Search `/docs/retrospective/` for similar work
+2. Extract successful approaches from high-performing sessions
+3. Adapt to current context while maintaining core methodology
 
 ---
 
@@ -920,274 +843,54 @@ npx prisma generate && npm run build
 
 ---
 
-## 📚 Project Implementation Learnings
+## 📚 Key Implementation Learnings
 
-### Key Insights from Development Journey
+### High-Impact Development Patterns
 
-Based on comprehensive retrospective analysis from the project implementation phases, the following critical learnings have been identified to enhance development efficiency and code quality:
+- **NextAuth.js**: 15-minute setup with standardized OAuth (Google, Facebook, Line)
+- **Schema-First Development**: Define schemas before implementation (60% less rework)
+- **TodoWrite Integration**: 56% efficiency gain for multi-component changes
+- **Pattern Replication**: Use `/docs/retrospective/` for sub-20-minute implementations
 
-#### 🎯 High-Impact Development Patterns
+### Technical Excellence
 
-**Authentication Implementation Excellence**:
-- **NextAuth.js Integration**: Proven 15-minute setup when following established patterns
-- **Provider Configuration**: Google, Facebook, and Line OAuth setup with standardized approach
-- **Session Management**: Robust session handling with proper TypeScript integration
-- **Security Best Practices**: Implemented proper CSRF protection and secure cookie handling
-
-**Database Schema & Sanity CMS Mastery**:
-- **Schema-First Development**: Define comprehensive schemas before implementation reduces rework by 60%
-- **Sanity Studio Optimization**: Custom studio configuration significantly improves content management workflow
-- **Type Safety Integration**: Automated TypeScript type generation from Sanity schemas prevents runtime errors
-- **Content Modeling**: Proper relationship modeling between Users, Training Plans, and Sessions
-
-**API Development Excellence**:
-- **RESTful Design Patterns**: Consistent API structure across all endpoints improves maintainability
-- **Error Handling Standards**: Standardized error responses with proper HTTP status codes
-- **Validation Middleware**: Zod schema validation prevents data corruption and improves API reliability
-- **Performance Optimization**: Proper caching strategies and database query optimization
-
-#### 🚀 Proven Efficiency Multipliers
-
-**TodoWrite Integration (56% Efficiency Gain)**:
-- **Multi-Component Refactoring**: Essential for changes affecting 3+ files
-- **Full-Stack Feature Implementation**: Critical for coordinated frontend/backend development
-- **Database Schema Changes**: Prevents missed application updates when schema evolves
-- **Complex Integration Work**: Maintains coherence across multiple system components
-
-**Reference Pattern Utilization**:
-- **Pattern Replication**: Following proven patterns achieves consistent sub-20-minute implementations
-- **Code Template Library**: Established templates for common components and API endpoints
-- **Architecture Consistency**: Standardized folder structure and naming conventions
-- **Testing Patterns**: Reusable testing approaches for different component types
-
-#### 🔧 Technical Implementation Insights
-
-**Frontend Development Optimizations**:
-- **Component Architecture**: Modular component design with proper prop typing
-- **State Management**: Zustand integration for efficient state handling
-- **Form Handling**: React Hook Form with Zod validation for robust form management
-- **UI Consistency**: DaisyUI component library ensures design system adherence
-
-**Backend Architecture Excellence**:
-- **API Route Organization**: Logical grouping and consistent naming conventions
-- **Middleware Implementation**: Reusable middleware for authentication, validation, and error handling
-- **Database Optimization**: Efficient query patterns and proper indexing strategies
-- **Type Safety**: End-to-end TypeScript integration from database to frontend
-
-**Integration & Testing Strategies**:
-- **Build Validation Checkpoints**: Critical validation points prevent deployment issues
-- **Automated Testing**: Comprehensive test coverage for API endpoints and components
-- **Error Boundary Implementation**: Proper error handling and user feedback mechanisms
-- **Performance Monitoring**: Real-time performance tracking and optimization
-
-#### 📊 Quality Assurance Learnings
-
-**Code Quality Standards**:
-- **TypeScript Strict Mode**: Prevents runtime errors and improves code reliability
-- **ESLint Configuration**: Consistent code style and best practice enforcement
-- **Prettier Integration**: Automated code formatting reduces review overhead
-- **Git Hooks**: Pre-commit validation ensures code quality standards
-
-**Testing Excellence**:
-- **Unit Testing**: Comprehensive component and utility function testing
-- **Integration Testing**: API endpoint testing with proper mock data
-- **E2E Testing**: Critical user journey validation
-- **Performance Testing**: Load testing and optimization validation
-
-#### 🔄 Workflow Optimization Insights
-
-**Development Process Improvements**:
-- **Branch Management**: Feature branch strategy with proper naming conventions
-- **Commit Standards**: Descriptive commit messages with proper categorization
-- **Pull Request Automation**: Automated PR creation with comprehensive descriptions
-- **Code Review Process**: Structured review checklist and approval workflow
-
-**Documentation Excellence**:
-- **Retrospective Documentation**: Systematic session analysis and pattern identification
-- **API Documentation**: Comprehensive endpoint documentation with examples
-- **Component Documentation**: Storybook integration for component library
-- **Deployment Documentation**: Step-by-step deployment and configuration guides
-
-#### 🎯 Performance Optimization Learnings
-
-**Frontend Performance**:
-- **Code Splitting**: Proper component lazy loading and route-based splitting
-- **Image Optimization**: Next.js Image component with proper sizing and formats
-- **Bundle Analysis**: Regular bundle size monitoring and optimization
-- **Caching Strategies**: Effective browser and CDN caching implementation
-
-**Backend Performance**:
-- **Database Query Optimization**: Efficient query patterns and proper indexing
-- **API Response Caching**: Strategic caching for frequently accessed data
-- **Connection Pooling**: Proper database connection management
-- **Memory Management**: Efficient memory usage and garbage collection optimization
-
-#### 🛡️ Security Implementation Excellence
-
-**Authentication Security**:
-- **OAuth Implementation**: Secure OAuth flow with proper token handling
-- **Session Security**: Secure session management with proper expiration
-- **CSRF Protection**: Comprehensive CSRF attack prevention
-- **Input Validation**: Robust input sanitization and validation
-
-**Data Protection**:
-- **Environment Variables**: Proper secret management and environment configuration
-- **API Security**: Rate limiting and request validation
-- **Database Security**: Proper access controls and data encryption
-- **Error Handling**: Secure error messages that don't expose sensitive information
-
-#### 📈 Scalability Considerations
-
-**Architecture Scalability**:
-- **Monorepo Structure**: Efficient code sharing and dependency management
-- **Component Reusability**: Shared component library across applications
-- **API Design**: RESTful design that supports future expansion
-- **Database Design**: Scalable schema design with proper relationships
-
-**Performance Scalability**:
-- **Caching Layers**: Multi-level caching strategy for improved performance
-- **Database Optimization**: Query optimization and proper indexing
-- **CDN Integration**: Static asset optimization and delivery
-- **Monitoring Integration**: Comprehensive performance monitoring and alerting
-
-#### 🔮 Future Development Recommendations
-
-**Technology Evolution**:
-- **Framework Updates**: Regular Next.js and dependency updates
-- **Performance Monitoring**: Continuous performance optimization
-- **Security Updates**: Regular security audit and vulnerability assessment
-- **Feature Enhancement**: User feedback-driven feature development
-
-**Team Development**:
-- **Knowledge Sharing**: Regular team knowledge sharing sessions
-- **Code Review Excellence**: Continuous improvement of review processes
-- **Documentation Maintenance**: Regular documentation updates and improvements
-- **Pattern Evolution**: Continuous refinement of development patterns and practices
+- **Frontend**: Component architecture, Zustand state, React Hook Form + Zod validation
+- **Backend**: RESTful APIs, Zod validation middleware, database optimization
+- **Quality**: TypeScript strict mode, ESLint/Prettier, automated testing
+- **Security**: OAuth flows, CSRF protection, input sanitization, environment variables
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Frontend Authentication Errors
+### Common Issues & Quick Fixes
 
-**Known Issues from Sub-Phase 1.2 Authentication Integration**:
+**Authentication Errors**:
 
-Based on retrospective analysis from 2025-01-09, the following frontend authentication errors have been identified and require attention:
+- CLIENT_FETCH_ERROR: Add frontend proxy route `/apps/frontend/src/app/api/auth/[...nextauth]/route.ts`
+- 404 Errors: Remove `basePath="/api/auth"` from SessionProvider
+- Session persistence: Verify NEXTAUTH_URL configuration in both apps
 
-**NextAuth Configuration Issues**:
-- **CLIENT_FETCH_ERROR**: Resolved by adding frontend proxy route at `/apps/frontend/src/app/api/auth/[...nextauth]/route.ts`
-- **404 Errors**: Fixed by removing `basePath="/api/auth"` from SessionProvider in AuthProvider.tsx
-- **Environment Configuration**: Ensure NEXTAUTH_URL is properly configured in both frontend and backend
+**Build Issues**:
 
-**Remaining Frontend Issues to Address**:
-- **Session State Management**: Frontend session state may not persist correctly across page refreshes
-- **Authentication Flow**: OAuth callback handling needs verification for all providers (Google, Facebook, Line)
-- **Error Boundaries**: Implement proper error handling for authentication failures
-- **Loading States**: Add proper loading indicators during authentication processes
+- TypeScript errors: `npx tsc --noEmit`
+- Dependencies: `pnpm install --force`
+- Cache: `rm -rf .next node_modules && npm install`
+- Port conflicts: `kill -9 $(lsof -t -i:3000)`
 
-**Debugging Commands**:
-```bash
-# Check NextAuth configuration
-echo $NEXTAUTH_URL
-echo $NEXTAUTH_SECRET
+**Database Issues**:
 
-# Verify frontend proxy route exists
-ls -la apps/frontend/src/app/api/auth/[...nextauth]/
+- Sequence reset: `SELECT setval('table_id_seq', (SELECT MAX(id) FROM table))`
+- Connection: `npx prisma db pull`
+- Reset: `npx prisma migrate reset && npx prisma generate`
 
-# Check for authentication errors in browser console
-# Look for CLIENT_FETCH_ERROR or 404 errors
-
-# Test authentication endpoints
-curl -I http://localhost:3000/api/auth/session
-curl -I http://localhost:3001/api/auth/session
-```
-
-**Resolution Priority**:
-1. **High**: Fix session persistence issues
-2. **High**: Verify OAuth provider configurations
-3. **Medium**: Implement comprehensive error boundaries
-4. **Medium**: Add loading states and user feedback
-
-### Build Failures
-
-**Common Issues and Solutions**:
+**Development Utilities**:
 
 ```bash
-# TypeScript compilation errors
-npx tsc --noEmit --listFiles | grep error
-
-# Missing dependencies
-npm install --force
-pnpm install --force
-
-# Cache issues
-rm -rf .next node_modules
-npm install
-
-# Port conflicts
-lsof -i :3000
-kill -9 $(lsof -t -i:3000)
-```
-
-### Database Issues
-
-**PostgreSQL Sequence Management**:
-
-```sql
--- Reset sequence after manual data insertion
-SELECT setval('table_id_seq', (SELECT MAX(id) FROM table));
-
--- Check sequence current value
-SELECT currval('table_id_seq');
-
--- Fix sequence mismatch
-SELECT setval('table_id_seq', COALESCE((SELECT MAX(id) FROM table), 1));
-```
-
-**Database Debugging**:
-
-```bash
-# Check database connection
-npx prisma db pull
-
-# Reset and reseed database
-npx prisma migrate reset
-npx prisma db seed
-
-# Generate fresh client
-npx prisma generate
-```
-
-### TypeScript Errors
-
-**Common Resolution Steps**:
-
-```bash
-# Clear TypeScript cache
+# Clear TS cache
 rm -rf .tsbuildinfo
 
-# Restart TypeScript server in IDE
-# VS Code: Cmd+Shift+P → "TypeScript: Restart TS Server"
-
-# Check for circular dependencies
-npx madge --circular src/
-```
-
-### Port Conflicts
-
-**Resolution Commands**:
-
-```bash
-# Find process using port
-lsof -i :3000
-
-# Kill specific process
-kill -9 [PID]
-
-# Kill all processes on port
-kill -9 $(lsof -t -i:3000)
-
-# Use alternative port
+# Alternative port
 npm run dev -- -p 3001
 ```
 
@@ -1239,17 +942,20 @@ npm run dev -- -p 3001
 ตาม PRD แอปพลิเคชันนี้จะเป็น **Free application with donation button** โดยมีรายละเอียดดังนี้:
 
 #### การใช้งานฟรี
+
 - ผู้ใช้ทุกคนสามารถใช้งานฟีเจอร์ทั้งหมดได้ฟรี
 - ไม่มีข้อจำกัดในการใช้งาน
 - ไม่มีระบบ subscription หรือ premium features
 
 #### ระบบ Donation
+
 - มีปุ่ม "Support the Project" หรือ "บริจาค" ในแอป
 - ผู้ใช้สามารถบริจาคเงินเพื่อสนับสนุนการพัฒนาต่อได้
 - การบริจาคเป็นไปด้วยความสมัครใจ 100%
 - ไม่มีสิทธิพิเศษใดๆ สำหรับผู้บริจาค
 
 #### เป้าหมายระยะยาว
+
 - สร้างชุมชนผู้ใช้ที่แข็งแกร่ง
 - พัฒนาฟีเจอร์ใหม่ๆ ตามความต้องการของผู้ใช้
 - รักษาความเป็น open source และฟรีตลอดไป
@@ -1288,305 +994,17 @@ npm run dev -- -p 3001
 
 ---
 
-## Sanity.io Schemas
+## Data Models & Schemas
 
-### User Schema
-```javascript
-export default {
-  name: 'user',
-  title: 'User',
-  type: 'document',
-  fields: [
-    {
-      name: 'name',
-      title: 'Name',
-      type: 'string',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'email',
-      title: 'Email',
-      type: 'string',
-      validation: Rule => Rule.required().email()
-    },
-    {
-      name: 'role',
-      title: 'Role',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Runner', value: 'runner'},
-          {title: 'Coach', value: 'coach'}
-        ]
-      },
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'profileImage',
-      title: 'Profile Image',
-      type: 'image'
-    },
-    {
-      name: 'createdAt',
-      title: 'Created At',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString()
-    }
-  ]
-}
-```
+### Core Entities
 
-### TrainingPlan Schema
-```javascript
-export default {
-  name: 'trainingPlan',
-  title: 'Training Plan',
-  type: 'document',
-  fields: [
-    {
-      name: 'title',
-      title: 'Plan Title',
-      type: 'string',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'runner',
-      title: 'Runner',
-      type: 'reference',
-      to: [{type: 'user'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'coach',
-      title: 'Coach',
-      type: 'reference',
-      to: [{type: 'user'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'weekStartDate',
-      title: 'Week Start Date',
-      type: 'date',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'sessions',
-      title: 'Training Sessions',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'trainingSession'}]}]
-    },
-    {
-      name: 'notes',
-      title: 'Plan Notes',
-      type: 'text'
-    },
-    {
-      name: 'createdAt',
-      title: 'Created At',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString()
-    }
-  ]
-}
-```
+- **User**: Name, email, role (runner/coach), profile image, timestamps
+- **TrainingPlan**: Title, coach-runner relationship, week dates, session references, notes
+- **TrainingSession**: Title, date, distance, duration, intensity levels, descriptions
+- **WorkoutLog**: Session reference, completion status, external links, feelings, injuries, review status
+- **Feedback**: Message threads between coaches and runners with timestamps
 
-### TrainingSession Schema
-```javascript
-export default {
-  name: 'trainingSession',
-  title: 'Training Session',
-  type: 'document',
-  fields: [
-    {
-      name: 'title',
-      title: 'Session Title',
-      type: 'string',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'date',
-      title: 'Session Date',
-      type: 'date',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'distance',
-      title: 'Distance (km)',
-      type: 'number'
-    },
-    {
-      name: 'duration',
-      title: 'Duration (minutes)',
-      type: 'number'
-    },
-    {
-      name: 'intensity',
-      title: 'Intensity',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Easy', value: 'easy'},
-          {title: 'Moderate', value: 'moderate'},
-          {title: 'Hard', value: 'hard'},
-          {title: 'Very Hard', value: 'very_hard'}
-        ]
-      }
-    },
-    {
-      name: 'description',
-      title: 'Session Description',
-      type: 'text'
-    },
-    {
-      name: 'notes',
-      title: 'Coach Notes',
-      type: 'text'
-    },
-    {
-      name: 'trainingPlan',
-      title: 'Training Plan',
-      type: 'reference',
-      to: [{type: 'trainingPlan'}],
-      validation: Rule => Rule.required()
-    }
-  ]
-}
-```
-
-### WorkoutLog Schema
-```javascript
-export default {
-  name: 'workoutLog',
-  title: 'Workout Log',
-  type: 'document',
-  fields: [
-    {
-      name: 'session',
-      title: 'Training Session',
-      type: 'reference',
-      to: [{type: 'trainingSession'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'runner',
-      title: 'Runner',
-      type: 'reference',
-      to: [{type: 'user'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'status',
-      title: 'Completion Status',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Completed', value: 'completed'},
-          {title: 'DNF (Did Not Finish)', value: 'dnf'},
-          {title: 'Undone', value: 'undone'}
-        ]
-      },
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'externalLink',
-      title: 'Strava/Garmin Link',
-      type: 'url'
-    },
-    {
-      name: 'personalNotes',
-      title: 'Personal Notes',
-      type: 'text'
-    },
-    {
-      name: 'feeling',
-      title: 'How did you feel?',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Great', value: 'great'},
-          {title: 'Good', value: 'good'},
-          {title: 'Okay', value: 'okay'},
-          {title: 'Tired', value: 'tired'},
-          {title: 'Exhausted', value: 'exhausted'}
-        ]
-      }
-    },
-    {
-      name: 'injuries',
-      title: 'Injuries/Pain',
-      type: 'text'
-    },
-    {
-      name: 'reviewedByCoach',
-      title: 'Reviewed by Coach',
-      type: 'boolean',
-      initialValue: false
-    },
-    {
-      name: 'loggedAt',
-      title: 'Logged At',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString()
-    }
-  ]
-}
-```
-
-### Feedback Schema
-```javascript
-export default {
-  name: 'feedback',
-  title: 'Feedback',
-  type: 'document',
-  fields: [
-    {
-      name: 'workoutLog',
-      title: 'Workout Log',
-      type: 'reference',
-      to: [{type: 'workoutLog'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'coach',
-      title: 'Coach',
-      type: 'reference',
-      to: [{type: 'user'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'runner',
-      title: 'Runner',
-      type: 'reference',
-      to: [{type: 'user'}],
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'message',
-      title: 'Feedback Message',
-      type: 'text',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'type',
-      title: 'Feedback Type',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Coach to Runner', value: 'coach_to_runner'},
-          {title: 'Runner to Coach', value: 'runner_to_coach'}
-        ]
-      },
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'createdAt',
-      title: 'Created At',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString()
-    }
-  ]
-}
-```
+_Complete schema definitions available in `/sanity/schemas/` directory_
 
 ---
 

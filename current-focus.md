@@ -1,52 +1,65 @@
-# Current Focus: Sub-Phase 2.1 - Training Plan Display with Error Handling
+# Current Focus: Login System Debugging with Enhanced Context
 
-**Created**: 2025-09-09 22:18:28
-**Context**: Implementation of Sub-Phase 2.1: Training Plan Display (เช้า) with comprehensive error log investigation and fixes
+**Created**: 2025-09-10 16:47:12 (Updated: 2025-09-10)
+**Context**: From retrospective analysis, multiple complex React hooks violations in login system requiring systematic approach with latest documentation
 
-## Current Implementation Scope
+## Issue Summary
+From `/docs/retrospective/2025-09-10-useauth-hooks-order-debugging-session.md`, there are persistent React hooks order violations in the `useAuth` hook causing LoginPage crashes with "Rendered more hooks than during the previous render" errors.
 
-### Primary Components
-- **Runner Dashboard**: Main interface for viewing training plans
-- **WeeklyTrainingPlan.tsx**: Component for displaying weekly training schedules
-- **TrainingSessionCard.tsx**: Individual session display cards
-- **ProgressSummary.tsx**: Progress tracking and summary component
-- **TrainingPlanFilters.tsx**: Filtering and sorting functionality
+## Key Problems Identified
+1. **Critical React Hooks Violation**: useEffect calls after conditional returns in useAuth.ts
+2. **Dependency Array Instability**: useEffect dependencies change between renders during hydration 
+3. **Conditional Hook Execution**: useEffect at line 107 called conditionally based on render state
+4. **SessionProvider Context Issues**: Secondary authentication flow problems
 
-### Key Features to Implement
-1. **Training Plan Display System**
-   - Weekly training schedule view
-   - Individual session details
-   - Progress tracking visualization
-   - Filter and search capabilities
+## Root Cause Analysis
+The retrospective reveals the REAL problem is NOT just useState reordering, but **CONDITIONAL useEffect EXECUTION** within the useAuth hook:
 
-2. **Error Handling & Logging**
-   - Frontend error boundary implementation
-   - Backend API error handling
-   - Comprehensive logging system
-   - Error recovery mechanisms
+```tsx
+// PROBLEMATIC STRUCTURE:
+useEffect(() => {
+  setMounted(true);
+}, []);
 
-### Backend API Integration
-- Training plan data fetching
-- Session status updates
-- Progress tracking endpoints
-- Error logging endpoints
+// Early return during hydration
+if (!mounted) {
+  return { /* stable values */ };
+}
 
-### UI/UX Components
-- Tremor charts for progress visualization
-- Responsive design for mobile/desktop
-- Loading states and error messages
-- Interactive session cards
+// MORE useEffect calls AFTER conditional return - PROBLEM!
+useEffect(() => {
+  if (isAuthenticated && !isLoading) {
+    fetchProfile();
+    fetchRole();
+  }
+}, [isAuthenticated, isLoading]); // <- Line 107, dependency array changes
+```
 
-### Error Investigation & Fixes
-- Frontend console error analysis
-- Backend API error monitoring
-- Database connection issues
-- Authentication error handling
-- Performance bottleneck identification
+During hydration:
+- First render: `[false, undefined]` 
+- Second render: `[false, true]`
+- Third render: `[true, false]`
 
-## Goals
-- Complete training plan display functionality
-- Implement robust error handling system
-- Ensure seamless user experience
-- Establish comprehensive logging for debugging
-- Fix any existing frontend/backend issues
+This violates React's expectation of consistent hook order and dependency arrays.
+
+## Strategy Enhancement
+Previous session attempted multiple failed approaches. Need to:
+
+1. **Use Context7** ✅ - Gathered latest NextAuth.js documentation on proper hook patterns
+2. **Use Playwright** - Visualize current UI state and authentication flow
+3. **Complete systematic analysis** - Frontend login implementation analysis
+4. **Create comprehensive plan** - Based on latest best practices
+
+## Context Enhancement Goals
+- ✅ Latest NextAuth.js App Router + useSession patterns gathered
+- ✅ Current hydration best practices documented  
+- 🔄 Visualize actual UI behavior during authentication
+- 🔄 Document proper hook architecture for complex auth flows
+
+## Next Steps
+1. Launch Playwright to see current login UI state
+2. Analyze frontend authentication implementation systematically  
+3. Create detailed plan based on Context7 insights and visual analysis
+4. Implement complete useAuth hook rewrite following React rules
+
+**Status**: Research phase - gathering enhanced context before implementation

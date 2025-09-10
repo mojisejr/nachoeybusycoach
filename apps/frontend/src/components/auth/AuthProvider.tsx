@@ -9,15 +9,13 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children, session }: AuthProviderProps) {
-  // Always provide SessionProvider context to prevent useSession hook errors
-  // Remove conditional rendering that breaks context availability
+  // Context7 SessionProvider pattern - always provide context
+  // Removed basePath to prevent proxy issues, following Context7 best practices
   return (
     <SessionProvider 
       session={session}
       refetchOnWindowFocus={false}
       refetchWhenOffline={false}
-      // Use basePath to proxy authentication to backend
-      basePath="/api/auth"
     >
       {children}
     </SessionProvider>
