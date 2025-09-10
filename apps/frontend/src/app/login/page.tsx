@@ -6,6 +6,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoginButtons } from '@/components/auth/LoginButton';
 import { FaRunning } from 'react-icons/fa';
 
+// Prevent static generation for this page
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+
 export default function LoginPage() {
   const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
