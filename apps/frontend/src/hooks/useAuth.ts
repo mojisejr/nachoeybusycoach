@@ -30,22 +30,36 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
   const [mounted, setMounted] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [roleLoading, setRoleLoading] = useState(false);
   const router = useRouter();
   
-  // Always call useSession to maintain hook order
-  const sessionData = useSession();
+  // Always call useSession to maintain hook order - now SessionProvider is always available
+  const { data: session, status } = useSession();
   
   useEffect(() => {
     setMounted(true);
   }, []);
   
-  // Use the session data only after component has mounted to prevent hydration issues
-  const session = mounted ? sessionData.data : null;
-  const status = mounted ? sessionData.status : 'loading';
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
-  const [profileLoading, setProfileLoading] = useState(false);
-  const [roleLoading, setRoleLoading] = useState(false);
+  // Return stable values during hydration to prevent mismatches
+  if (!mounted) {
+    return {
+      user: null,
+      userProfile: null,
+      userRole: null,
+      isLoading: true,
+      isAuthenticated: false,
+      profileLoading: false,
+      roleLoading: false,
+      login: async () => {},
+      logout: async () => {},
+      redirectToDashboard: () => {},
+      refreshProfile: async () => {},
+      refreshRole: async () => {},
+    };
+  }
 
   const user = session?.user as AuthUser;
   const isLoading = status === 'loading';
