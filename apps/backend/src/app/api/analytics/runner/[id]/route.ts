@@ -41,16 +41,17 @@ const authOptions = {
 // GET /api/analytics/runner/[id] - Get comprehensive runner analytics
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const runnerId = params.id;
+    const runnerId = id;
     const { searchParams } = new URL(request.url);
     const period = searchParams.get("period") || "30"; // days
     const timeframe = searchParams.get("timeframe") || "all"; // all, week, month, year

@@ -4,9 +4,9 @@ import { client } from '@/lib/sanity';
 import { trainingPlanUpdateSchema } from '@/lib/validations/trainingPlan';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -18,6 +18,7 @@ export async function GET(
   { params }: RouteParams
 ) {
   try {
+    const { id } = await params;
     // Get the authenticated user session
     const session = await getServerSession();
     
@@ -75,7 +76,7 @@ export async function GET(
       }
     }`;
 
-    const trainingPlan = await client.fetch(trainingPlanQuery, { id: params.id });
+    const trainingPlan = await client.fetch(trainingPlanQuery, { id });
 
     if (!trainingPlan) {
       return NextResponse.json(
@@ -118,6 +119,7 @@ export async function PUT(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const { id } = await params;
   try {
     // Get the authenticated user session
     const session = await getServerSession();
@@ -150,7 +152,7 @@ export async function PUT(
 
     // Check if training plan exists and user has access
     const existingPlanQuery = `*[_type == "trainingPlan" && _id == $id][0] { _id, coachId, runnerId, weekStart, weekEnd }`;
-    const existingPlan = await client.fetch(existingPlanQuery, { id: params.id });
+    const existingPlan = await client.fetch(existingPlanQuery, { id });
 
     if (!existingPlan) {
       return NextResponse.json(
@@ -195,7 +197,7 @@ export async function PUT(
          (weekStart >= $weekStart && weekEnd <= $weekEnd))] { _id }`;
       
       const overlappingPlans = await client.fetch(overlapQuery, {
-        currentId: params.id,
+        currentId: id,
         runnerId: existingPlan.runnerId,
         weekStart: newWeekStart,
         weekEnd: newWeekEnd
@@ -217,7 +219,7 @@ export async function PUT(
 
     // Update the training plan
     const updatedPlan = await client
-      .patch(params.id)
+      .patch(id)
       .set(updateData)
       .commit();
 
@@ -245,7 +247,7 @@ export async function PUT(
       }
     }`;
 
-    const planWithRelations = await client.fetch(updatedPlanQuery, { id: params.id });
+    const planWithRelations = await client.fetch(updatedPlanQuery, { id });
 
     return NextResponse.json({
       success: true,
@@ -279,6 +281,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const { id } = await params;
   try {
     // Get the authenticated user session
     const session = await getServerSession();
@@ -316,7 +319,7 @@ export async function DELETE(
       title,
       "sessionsCount": count(*[_type == "trainingSession" && references(^._id)])
     }`;
-    const existingPlan = await client.fetch(existingPlanQuery, { id: params.id });
+    const existingPlan = await client.fetch(existingPlanQuery, { id });
 
     if (!existingPlan) {
       return NextResponse.json(
@@ -345,7 +348,7 @@ export async function DELETE(
     }
 
     // Delete the training plan
-    await client.delete(params.id);
+    await client.delete(id);
 
     return NextResponse.json({
       success: true,

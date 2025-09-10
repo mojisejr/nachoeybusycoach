@@ -1,9 +1,9 @@
 import type { Config } from 'tailwindcss'
 
-// Frontend-specific Tailwind configuration
+// Base Tailwind configuration for the monorepo
 const config: Config & {
   daisyui?: {
-     themes: unknown[]
+    themes: any[]
     base: boolean
     utils: boolean
     logs: boolean
@@ -11,10 +11,9 @@ const config: Config & {
   }
 } = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    '../../packages/ui/**/*.{js,ts,jsx,tsx}'
+    './apps/*/src/**/*.{js,ts,jsx,tsx,mdx}',
+    './packages/ui/**/*.{js,ts,jsx,tsx}',
+    './packages/*/src/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
     extend: {
@@ -24,7 +23,8 @@ const config: Config & {
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out'
+        'slide-up': 'slideUp 0.3s ease-out',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
       },
       keyframes: {
         fadeIn: {
@@ -46,11 +46,9 @@ const config: Config & {
     }
   },
   plugins: [
-     // eslint-disable-next-line @typescript-eslint/no-require-imports
-     require('daisyui'),
-     // eslint-disable-next-line @typescript-eslint/no-require-imports
-     require('@tailwindcss/typography')
-   ],
+    require('daisyui'),
+    require('@tailwindcss/typography')
+  ],
   daisyui: {
     themes: [
       {

@@ -1,65 +1,68 @@
-# Current Focus: Login System Debugging with Enhanced Context
+# Phase 1: Preparation and Backup - Frontend-Backend Merge
 
-**Created**: 2025-09-10 16:47:12 (Updated: 2025-09-10)
-**Context**: From retrospective analysis, multiple complex React hooks violations in login system requiring systematic approach with latest documentation
+**Created**: 2025-09-10 16:47:12 (Updated: 2025-09-10 19:30:00)
+**Context**: Beginning Phase 1 of comprehensive frontend-backend merge plan from merge-plan.md
 
-## Issue Summary
-From `/docs/retrospective/2025-09-10-useauth-hooks-order-debugging-session.md`, there are persistent React hooks order violations in the `useAuth` hook causing LoginPage crashes with "Rendered more hooks than during the previous render" errors.
+## Current Focus
 
-## Key Problems Identified
-1. **Critical React Hooks Violation**: useEffect calls after conditional returns in useAuth.ts
-2. **Dependency Array Instability**: useEffect dependencies change between renders during hydration 
-3. **Conditional Hook Execution**: useEffect at line 107 called conditionally based on render state
-4. **SessionProvider Context Issues**: Secondary authentication flow problems
+Implementing Phase 1 of the systematic merge process to consolidate separate frontend and backend Next.js applications into a single fullstack application. This phase prioritizes safety through comprehensive backup and preparation.
 
-## Root Cause Analysis
-The retrospective reveals the REAL problem is NOT just useState reordering, but **CONDITIONAL useEffect EXECUTION** within the useAuth hook:
+## Phase 1 Objectives (Context: ~50k tokens)
 
-```tsx
-// PROBLEMATIC STRUCTURE:
-useEffect(() => {
-  setMounted(true);
-}, []);
+- Create backup of current state
+- Analyze dependencies and conflicts  
+- Prepare merge environment
+- Document current architecture for safe migration
 
-// Early return during hydration
-if (!mounted) {
-  return { /* stable values */ };
-}
+## Phase 1 Tasks
 
-// MORE useEffect calls AFTER conditional return - PROBLEM!
-useEffect(() => {
-  if (isAuthenticated && !isLoading) {
-    fetchProfile();
-    fetchRole();
-  }
-}, [isAuthenticated, isLoading]); // <- Line 107, dependency array changes
+### 1.1 Backup Current State
+```bash
+# Create backup branch
+git checkout -b backup-before-merge
+git add .
+git commit -m "Backup before frontend-backend merge"
+git push origin backup-before-merge
 ```
 
-During hydration:
-- First render: `[false, undefined]` 
-- Second render: `[false, true]`
-- Third render: `[true, false]`
+### 1.2 Dependency Analysis
+- [ ] Compare `package.json` files between apps/frontend and apps/backend
+- [ ] Identify conflicting dependencies and version mismatches
+- [ ] Plan dependency resolution strategy
+- [ ] Document version conflicts for safe resolution
 
-This violates React's expectation of consistent hook order and dependency arrays.
+### 1.3 Environment Setup
+- [ ] Create new branch for merge: `git checkout -b merge-frontend-backend`
+- [ ] Backup environment files (.env, .env.local)  
+- [ ] Document current environment variables mapping
 
-## Strategy Enhancement
-Previous session attempted multiple failed approaches. Need to:
+### 1.4 Documentation
+- [ ] Document current API endpoints in backend
+- [ ] List all frontend routes and pages
+- [ ] Map component dependencies between applications
+- [ ] Identify shared utilities for consolidation
 
-1. **Use Context7** ✅ - Gathered latest NextAuth.js documentation on proper hook patterns
-2. **Use Playwright** - Visualize current UI state and authentication flow
-3. **Complete systematic analysis** - Frontend login implementation analysis
-4. **Create comprehensive plan** - Based on latest best practices
+## Migration Strategy
 
-## Context Enhancement Goals
-- ✅ Latest NextAuth.js App Router + useSession patterns gathered
-- ✅ Current hydration best practices documented  
-- 🔄 Visualize actual UI behavior during authentication
-- 🔄 Document proper hook architecture for complex auth flows
+**Using backend as base** since it already has:
+- Authentication system (NextAuth)
+- Database integration (Sanity)
+- API infrastructure  
+- Production-ready configuration
 
-## Next Steps
-1. Launch Playwright to see current login UI state
-2. Analyze frontend authentication implementation systematically  
-3. Create detailed plan based on Context7 insights and visual analysis
-4. Implement complete useAuth hook rewrite following React rules
+## Success Criteria
 
-**Status**: Research phase - gathering enhanced context before implementation
+- ✅ Complete backup created and verified
+- ✅ All dependencies documented with versions
+- ✅ Potential conflicts identified and categorized  
+- ✅ Development branch created and tested
+- ✅ Team has access to rollback procedures
+
+## Risk Management
+
+- **Risk**: Incomplete backup → *Mitigation*: Verify backup integrity, test restore process
+- **Risk**: Missing dependency conflicts → *Mitigation*: Use automated tools for dependency analysis
+- **Risk**: Development branch corruption → *Mitigation*: Create multiple backup branches, use Git tags
+
+**Current Branch**: feature/68-webpack-authentication-proxy-resolution  
+**Next Steps**: Execute Phase 1 tasks systematically with full documentation
