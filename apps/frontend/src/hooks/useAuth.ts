@@ -29,6 +29,7 @@ interface UseAuthReturn {
 }
 
 export function useAuth(): UseAuthReturn {
+  // 1. ALL useState calls first (Context7 best practice)
   const [mounted, setMounted] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
@@ -36,36 +37,15 @@ export function useAuth(): UseAuthReturn {
   const [roleLoading, setRoleLoading] = useState(false);
   const router = useRouter();
   
-  // Always call useSession to maintain hook order - now SessionProvider is always available
+  // 2. useSession hook (from Context7 patterns)
   const { data: session, status } = useSession();
   
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  
-  // Return stable values during hydration to prevent mismatches
-  if (!mounted) {
-    return {
-      user: null,
-      userProfile: null,
-      userRole: null,
-      isLoading: true,
-      isAuthenticated: false,
-      profileLoading: false,
-      roleLoading: false,
-      login: async () => {},
-      logout: async () => {},
-      redirectToDashboard: () => {},
-      refreshProfile: async () => {},
-      refreshRole: async () => {},
-    };
-  }
-
+  // 3. Calculate derived values BEFORE useEffect (Context7 pattern)
   const user = session?.user as AuthUser;
   const isLoading = status === 'loading';
   const isAuthenticated = !!session;
-
-  // Fetch user profile
+  
+  // Fetch user profile - defined before useEffect
   const fetchProfile = async () => {
     if (!isAuthenticated || profileLoading) return;
     
@@ -84,7 +64,7 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  // Fetch user role and permissions
+  // Fetch user role and permissions - defined before useEffect
   const fetchRole = async () => {
     if (!isAuthenticated || roleLoading) return;
     
@@ -102,9 +82,16 @@ export function useAuth(): UseAuthReturn {
       setRoleLoading(false);
     }
   };
-
-  // Fetch profile and role when authenticated
+  
+  // 4. ALL useEffect calls BEFORE conditional return (Context7 critical fix)
   useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  useEffect(() => {
+    // Guard with mounted to prevent hydration issues (Context7 pattern)
+    if (!mounted) return;
+    
     if (isAuthenticated && !isLoading) {
       fetchProfile();
       fetchRole();
@@ -112,7 +99,25 @@ export function useAuth(): UseAuthReturn {
       setUserProfile(null);
       setUserRole(null);
     }
-  }, [isAuthenticated, isLoading]);
+  }, [mounted, isAuthenticated, isLoading]); // Stable dependencies with mounted guard
+  
+  // 5. THEN conditional return (Context7 best practice)
+  if (!mounted) {
+    return {
+      user: null,
+      userProfile: null,
+      userRole: null,
+      isLoading: true,
+      isAuthenticated: false,
+      profileLoading: false,
+      roleLoading: false,
+      login: async () => {},
+      logout: async () => {},
+      redirectToDashboard: () => {},
+      refreshProfile: async () => {},
+      refreshRole: async () => {},
+    };
+  }
 
   const login = async (provider?: string) => {
     try {
