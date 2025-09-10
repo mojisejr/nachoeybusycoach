@@ -30,6 +30,10 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
   const [mounted, setMounted] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [roleLoading, setRoleLoading] = useState(false);
   const router = useRouter();
   
   // Always call useSession to maintain hook order - now SessionProvider is always available
@@ -56,10 +60,6 @@ export function useAuth(): UseAuthReturn {
       refreshRole: async () => {},
     };
   }
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
-  const [profileLoading, setProfileLoading] = useState(false);
-  const [roleLoading, setRoleLoading] = useState(false);
 
   const user = session?.user as AuthUser;
   const isLoading = status === 'loading';
