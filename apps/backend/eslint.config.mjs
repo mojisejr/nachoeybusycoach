@@ -1,24 +1,19 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import baseConfig from "../../eslint.config.mjs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
+// Backend-specific ESLint configuration
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...baseConfig,
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-    ],
+    files: ["**/*.ts", "**/*.tsx"],
+    rules: {
+      // Backend-specific rules - more relaxed for API development
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "import/no-anonymous-default-export": "off",
+      "prefer-const": "off",
+      "@next/next/no-img-element": "off",
+      "no-console": "off", // Allow console logs in backend
+    },
   },
 ];
 

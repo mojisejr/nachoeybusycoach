@@ -42,9 +42,10 @@ const authOptions = {
 // PUT /api/workout-logs/[id] - Update an existing workout log
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -53,8 +54,6 @@ export async function PUT(
         { status: 401 }
       );
     }
-
-    const { id } = params;
 
     // Check if workout log exists
     const existingWorkoutLog = await client.fetch(
@@ -143,8 +142,9 @@ export async function PUT(
 // DELETE /api/workout-logs/[id] - Delete a workout log
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Check authentication
     const session = await getServerSession(authOptions);
@@ -154,8 +154,6 @@ export async function DELETE(
         { status: 401 }
       );
     }
-
-    const { id } = params;
 
     // Check if workout log exists
     const existingWorkoutLog = await client.fetch(
@@ -189,8 +187,9 @@ export async function DELETE(
 // GET /api/workout-logs/[id] - Get a specific workout log
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Check authentication
     const session = await getServerSession(authOptions);
@@ -200,8 +199,6 @@ export async function GET(
         { status: 401 }
       );
     }
-
-    const { id } = params;
 
     // Fetch the workout log with references
     const workoutLog = await client.fetch(

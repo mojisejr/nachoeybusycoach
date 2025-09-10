@@ -3,20 +3,75 @@
   "version": "1.0.0",
   "description": "แอปพลิเคชันศูนย์กลางการสื่อสารและบริหารจัดการระหว่างนักวิ่งและโค้ชส่วนตัว",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "build": "pnpm -r build",
-    "dev": "pnpm -r dev",
-    "lint": "pnpm -r lint",
-    "type-check": "pnpm -r type-check",
-    "clean": "pnpm -r clean",
-    "test": "pnpm -r test"
+    "dev": "pnpm run --parallel dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm run --recursive build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "start": "pnpm run --parallel start",
+    "start:frontend": "pnpm --filter frontend start",
+    "start:backend": "pnpm --filter backend start",
+    "lint": "pnpm run --recursive lint",
+    "lint:fix": "pnpm run --recursive lint:fix",
+    "lint:frontend": "pnpm --filter frontend lint",
+    "lint:backend": "pnpm --filter backend lint",
+    "type-check": "pnpm run --recursive type-check",
+    "test": "pnpm run --recursive test",
+    "test:frontend": "pnpm --filter frontend test",
+    "test:backend": "pnpm --filter backend test",
+    "clean": "pnpm run --recursive clean",
+    "clean:deps": "rm -rf node_modules apps/*/node_modules packages/*/node_modules",
+    "install:all": "pnpm install",
+    "reset": "rm -rf node_modules apps/*/node_modules packages/*/node_modules && pnpm install",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
+   },
+   "dependencies": {
+    "next": "15.5.2",
+    "next-auth": "^4.24.11",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.2",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   },
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
-  }
+  },
+  "packageManager": "pnpm@8.15.0",
+  "keywords": [
+    "running",
+    "coach",
+    "training",
+    "monorepo",
+    "nextjs",
+    "typescript"
+  ],
+  "author": "NachoeyBusyCoach Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mojisejr/nachoeybusycoach.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mojisejr/nachoeybusycoach/issues"
+  },
+  "homepage": "https://github.com/mojisejr/nachoeybusycoach#readme"
 }

@@ -5,22 +5,20 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist",
-    "rootDir": ".",
-    "jsx": "react-jsx",
+    "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/types/*": ["../types/*"],
-      "@/utils/*": ["../utils/*"]
+      "@/types/*": ["../types/*"]
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "index.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

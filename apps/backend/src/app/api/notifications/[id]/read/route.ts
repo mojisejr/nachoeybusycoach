@@ -11,9 +11,10 @@ import { markNotificationAsRead } from '@/lib/notifications';
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Get the authenticated user session
     const session = await getServerSession(authOptions);
     
@@ -35,7 +36,7 @@ export async function PATCH(
       );
     }
 
-    const notificationId = params.id;
+    const notificationId = id;
 
     // Validate notification ID format
     if (!notificationId || typeof notificationId !== 'string') {
@@ -139,8 +140,9 @@ export async function PATCH(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   // Delegate to PATCH handler
   return PATCH(request, { params });
 }
@@ -151,8 +153,9 @@ export async function POST(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Get the authenticated user session
     const session = await getServerSession(authOptions);
@@ -175,7 +178,7 @@ export async function DELETE(
       );
     }
 
-    const notificationId = params.id;
+    const notificationId = id;
 
     // Validate notification ID format
     if (!notificationId || typeof notificationId !== 'string') {
