@@ -12,7 +12,12 @@
       "@/*": ["./src/*"],
       "@/ui/*": ["../../packages/ui/*"],
       "@/types/*": ["../../packages/types/*"],
-      "@/utils/*": ["../../packages/utils/*"]
+      "@/utils/*": ["../../packages/utils/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/store/*": ["./src/store/*"]
     }
   },
   "include": [
